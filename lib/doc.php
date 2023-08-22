@@ -74,6 +74,23 @@ UCOUNT:%x[0,FID]
 UCOUNT:%x[1,FID]';
 
 // before and next
+$feature_templates['blockAlignSelf'] =
+'UCOUNT:%x[-1,FID]
+UCOUNT:%x[0,FID]
+UCOUNT:%x[1,FID]';
+
+$feature_templates['blockJustifySelf'] =
+'UCOUNT:%x[-1,FID]
+UCOUNT:%x[0,FID]
+UCOUNT:%x[1,FID]';
+
+$feature_templates['blockImageAdjacent'] =
+'UCOUNT:%x[-1,FID]
+UCOUNT:%x[0,FID]
+UCOUNT:%x[1,FID]';
+
+
+// before and next
 $feature_templates['pageStatus'] =
 'UCOUNT:%x[-1,FID]
 UCOUNT:%x[0,FID]
@@ -100,6 +117,7 @@ UCOUNT:%x[2,FID]';
 // simple presence/absence
 $feature_templates['email'] = 'UCOUNT:%x[0,FID]';
 $feature_templates['http'] = 'UCOUNT:%x[0,FID]';
+$feature_templates['urn'] = 'UCOUNT:%x[0,FID]';
 $feature_templates['doi'] = 'UCOUNT:%x[0,FID]';
 
 // two lines above and below
@@ -610,14 +628,16 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 	{
 		$block_features = array();
 		
-	
 		$bounding_rect = page_bounding_rect($page);
 		$block_rects   = page_block_rects($page);
+		
+		$page_top_rect = new Rectangle($bounding_rect->x, $bounding_rect->y, $bounding_rect->w, $doc->modal_font_size);							
+		$page_bottom_rect = new Rectangle($bounding_rect->x, $bounding_rect->y + $bounding_rect->h - $doc->modal_font_size, $bounding_rect->w, $doc->modal_font_size);
 		
 		// Get basic style for each block based on position w.r.t. bounding rectangle
 		// to do: handle multiple columns	
 		$slop = $doc->modal_font_size; // allow for some margin of error	
-			
+		
 		foreach ($block_rects as $block_id => $r)
 		{		
 			$grid = grid($bounding_rect, $r, $slop);
@@ -642,8 +662,49 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				$block_features[$block_id][$pos] = $grid[$pos];
 			}
 			*/
+			
+			// block alignment
+			$justifyself = 'NORMAL';
+			
+			if ($grid['centered'])
+			{
+				$justifyself = 'CENTER';
+			
+				if ($grid['left'] && $grid['right'])
+				{
+					$justifyself = 'STRETCH';
+				}
+			}
+			else
+			{
+				if ($grid['left'])
+				{
+					$justifyself = 'LEFT';
+				}
+				elseif ($grid['right'])
+				{
+					$justifyself = 'RIGHT';
+				}				
+			}
+			$block_features[$block_id]['blockJustifySelf'] = $justifyself;			
+			
+			// block position w.r.t. page
+			$block_features[$block_id]['blockAlignSelf'] = 'NORMAL';
+			
+			$overlap = $page_top_rect->getOverlap($block_rects[$block_id]);				
+			if ($overlap)
+			{
+				$block_features[$block_id]['blockAlignSelf'] = 'START';
+			}
+			$overlap = $page_bottom_rect->getOverlap($block_rects[$block_id]);				
+			if ($overlap)
+			{
+				$block_features[$block_id]['blockAlignSelf'] = 'END';
+			}						
+			
 		}	
 		
+		// repetitive header/footers
 		foreach ($doc->decoration_blocks[$page_counter] as $decoration_block_id)
 		{
 			$block_features[$decoration_block_id]['repetitivePattern'] = 1;
@@ -655,7 +716,38 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 		}
 		
 		//--------------------------------------------------------------------------------
-		// Get number of lines in each block, also store text in each line		
+		// relationship between text and image blocks
+		// by default we just look for text that is below an image
+		foreach ($page->blocks as $block_id => $block)
+		{
+			if (!isset($block_features[$block_id]['blockImageAdjacent']))
+			{
+				$block_features[$block_id]['blockImageAdjacent'] = 0;
+			}
+		
+			if ($block->type == 'image')
+			{
+				// inflate
+				$image_rect = $block_rects[$block_id];
+				
+				$image_rect->h += 1.5 *$doc->modal_font_size;
+				
+				// does it overlap with anything?
+				foreach ($page->blocks as $other_id => $other_block)
+				{
+					if ($block_id != $other_id)
+					{
+						if ($block_rects[$other_id]->getOverlap($image_rect))
+						{
+							$block_features[$other_id]['blockImageAdjacent'] = 1;
+						}
+					}
+				}
+			}
+		}
+		
+		//--------------------------------------------------------------------------------
+		// Get number of lines in each block		
 		
 		$block_line_count = array();
 		$block_lines = array();
@@ -698,7 +790,7 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 		
 		//--------------------------------------------------------------------------------
 		// get modal font size in block, just use first word in line (assume we have 
-		// enforce same height across tokens in line)
+		// enforced the same height across tokens in line)
 		foreach ($block_lines as $block_id => $lines)
 		{
 			$sizes = array();
@@ -735,7 +827,6 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 			$fontSize  = font_classify($doc->font_map, $block_modal_font_size);
 			$block_features[$block_id]['fontSize'] = $fontSize;
 		}
-		
 		
 		//--------------------------------------------------------------------------------
 		// text alignment within block, e.g. indents
@@ -787,7 +878,7 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 		
 		//--------------------------------------------------------------------------------
 		// how much of line is occupied by tokens?
-		// sparse lines (widely separated tokens) would be typical of tabkles, for example
+		// sparse lines (widely separated tokens) would be typical of tables, for example
 		$line_density = array();
 		foreach ($block_lines as $block_id => $lines)
 		{
@@ -842,9 +933,7 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				$n = count($doc->feature_row_to_page);
 				$doc->feature_row_to_page[$n] = $page_counter;
 				
-				$doc->feature_row_to_words[$n] = array();
-			
-			
+				$doc->feature_row_to_words[$n] = array();		
 			
 				//------------------------------------------------------------------------
 				// get line of text
@@ -859,10 +948,8 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				}
 				$line_text = join(' ', $words);
 			
-				// Initialise line features
-				$line_features[$line_id] = array();
-				
-
+				// Initialise list of line features
+				$line_features[$line_id] = array();				
 			
 				//------------------------------------------------------------------------
 				// Features of first two words in the line
@@ -881,25 +968,24 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				}
 				$line_features[$line_id]['secondString'] = $secondString;
 				
+				// cleaned first token
+				$wordNP = $string;
+				$wordNP = preg_replace('/[^\\p{L}|\d]/u', '', $wordNP);
+				if (preg_match('/^\s*$/u', $wordNP))
+				{
+					$wordNP = "EMPTY";
+				}								
 				// lowercase
-				$wordLCNP = mb_strtolower($string);
+				$wordLCNP = mb_strtolower($wordNP);
 				$line_features[$line_id]['lowercase'] = $wordLCNP;
 					
-				// atomise the first token				
+				// atomise the first token so we can extract characters			
 				$chars = mb_str_split($string);
 			
 				$line_features[$line_id]['prefix1']  = $chars[0]; // 2 = first char
 				$line_features[$line_id]['prefix2']  = join("", array_slice($chars, 0, 2)); // 3 = first 2 chars
 				$line_features[$line_id]['prefix3']  = join("", array_slice($chars, 0, 3)); // 4 = first 3 chars
 				$line_features[$line_id]['prefix4']  = join("", array_slice($chars, 0, 4)); // 5 = first 4 chars
-
-				// first token
-				$wordNP = $string;
-				$wordNP = preg_replace('/[^\\p{L}|\d]/u', '', $wordNP);
-				if (preg_match('/^\s*$/u', $wordNP))
-				{
-					$wordNP = "EMPTY";
-				}
 				
 				// capitalisation
 				$ortho = 'NOCAPS';
@@ -950,6 +1036,13 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 					$line_features[$line_id]['http'] = 1;
 				}
 				
+				// URN
+				$line_features[$line_id]['urn'] = 0;
+				if (preg_match("/urn:/", $line_text))
+				{
+					$line_features[$line_id]['urn'] = 1;
+				}				
+				
 				// DOI
 				$line_features[$line_id]['doi'] = 0;
 				if (preg_match("/(doi.org|doi:)/", $line_text))
@@ -980,7 +1073,7 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 					$line_features[$line_id]['punctuationProfileLength'] = 0;
 				}	
 				
-				// page numbers?
+				// page numbers (e.g., in a citation)
 				if (preg_match('/([0-9]\s*[\-|—|–]\s*[0-9])|(\d+\s*pp\.)/u', $line_text))
 				{
 					$line_features[$line_id]['possiblePage'] = 1;
@@ -1076,12 +1169,20 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				$fontSize = $block_features[$block_id]['fontSize'];
 				$fontSize = strtoupper(str_replace('-', '', $fontSize));
 				
-				$line_features[$line_id]['fontSize'] = $fontSize;		
-				$line_features[$line_id]['repetitivePattern'] = $block_features[$block_id]['repetitivePattern'];		
+				$line_features[$line_id]['fontSize'] = $fontSize;
+										
+				$line_features[$line_id]['repetitivePattern'] = $block_features[$block_id]['repetitivePattern'];						
 				
+				$line_features[$line_id]['blockAlignSelf'] = $block_features[$block_id]['blockAlignSelf'];
+				$line_features[$line_id]['blockJustifySelf'] = $block_features[$block_id]['blockJustifySelf'];
 				
+				$line_features[$line_id]['blockImageAdjacent'] = $block_features[$block_id]['blockImageAdjacent'];
+
+
 				//------------------------------------------------------------------------
 				// features of page this line belongs too
+				
+				// this effectively assumes that the order of blocks matches reading order
 				if ($page_start)
 				{
 					$line_features[$line_id]['pageStatus'] = 'PAGESTART';
@@ -1097,8 +1198,7 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				{
 					$line_features[$line_id]['label'] = $page->labels[$word_id];
 				}
-				
-				
+								
 				$page_start = false;
 				$block_start = false;
 			}

@@ -184,7 +184,7 @@ foreach ($pages_tokens as $page_number => $page)
 	if (count($page->words) > 0)
 	{
 		$filename = 'tokens' . str_pad($page_number, 3, '0', STR_PAD_LEFT) . '.json';
-		file_put_contents($basedir . '/' . $filename, json_encode($page));
+		file_put_contents($basedir . '/' . $filename, json_encode($page, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
 	}
 }
 

@@ -16,7 +16,7 @@ require_once(dirname(__FILE__) . '/lib/crf.php');
 $basedir = '';
 if ($argc < 2)
 {
-	echo "Usage: predict.php <basedir>\n";
+	echo "Usage: labels_to_crf.php <basedir>\n";
 	exit(1);
 }
 else

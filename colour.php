@@ -77,8 +77,35 @@ foreach ($files as $filename)
 			$html .=  '</style>';
 			$html .=  '</head>';
 			$html .=  '<body>';
+			
+			
 	
 			$html .=  '<div style="position:relative;width:' . ($scale * $tokens->width) . 'px;height:' . ($scale * $tokens->height)  . 'px;border:1px solid rgb(228,228,228);margin:10px;">';		
+			
+			if (1)
+			{
+				foreach ($tokens->blocks as $block_id => $block)
+				{			
+					$left 	= $scale * $block->bbox[0];
+					$top 	= $scale * $block->bbox[1];
+					$width 	= $scale * ($block->bbox[2] - $block->bbox[0]);
+					$height = $scale * ($block->bbox[3] - $block->bbox[1]);
+
+					$html .=  '<div title="block_' . $block_id . '" style="background:#FFFFCC; border:1px solid rgb(228,228,228); position:absolute;left:' . $left . 'px;'
+						. 'top:' . $top . 'px;'
+						. 'width:' . $width . 'px;'
+						. 'height:' . $height . 'px;'						
+						. '">';
+					
+					if ($block->type == 'image')
+					{
+						$html .= '<img src="../' . $block->href . '" width="' . $width . '">';
+					}
+					
+					$html .= '</div>';			
+				}
+			}
+			
 			
 			
 			foreach ($labels as $word_id => $label)
@@ -97,6 +124,7 @@ foreach ($files as $filename)
 					. '"></div>';
 		
 			}
+			
 	
 			$html .=  '</div>';
 			$html .=  '</body>';			

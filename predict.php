@@ -38,7 +38,6 @@ $crf_data = doc_do_pages($doc);
 $data_filename = $basedir . '.data';
 file_put_contents($data_filename, $crf_data);
 
-
 $output_filename = $basedir . '.out';	
 
 $command = 'crf_test -m rod.model ' . $data_filename . ' > ' . $output_filename;

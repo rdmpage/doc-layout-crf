@@ -4,7 +4,8 @@
 <dict>
 	<key>HierarchyData</key>
 	<array>
-		<string>589C56F7-44CB-41C3-A8DC-9306BB1DE3F5</string>
+		<string>418922EB-D6F6-41E3-BF37-F563C017F310</string>
+		<string>48A0743E-FF2F-4D8E-BA0B-66756D9B0FF2</string>
 		<string>00F403DB-1105-4591-ABB2-23B6A0243477</string>
 		<string>2C45FF04-AE76-4ACE-B570-8063D6E616CF</string>
 		<string>41CA4A52-A1BB-48B4-9C22-42552802E71C</string>
@@ -14,6 +15,7 @@
 		<string>4C6D1504-F837-4817-BF1D-A06D7669A63D</string>
 		<string>2C3FC4E2-B216-438A-941D-D1379682C8BD</string>
 		<string>6FDDDAE5-FD57-40BF-8A1F-BF19C0E2F1C1</string>
+		<string>BB2AE17B-92AE-4B27-80B8-FC4FEABD68DF</string>
 	</array>
 	<key>ProjectItems</key>
 	<dict>
@@ -161,6 +163,56 @@
 			<key>UserOverrideItemName</key>
 			<true/>
 		</dict>
+		<key>418922EB-D6F6-41E3-BF37-F563C017F310</key>
+		<dict>
+			<key>ItemData</key>
+			<dict>
+				<key>BookmarkData</key>
+				<data>
+				Ym9vaygDAAAAAAQQMAAAABPxkHyf5T4u/pPVed01HJZE
+				tbn6cvtdgoCnAw3NJvlLGAIAAAQAAAADAwAAAAgAKAUA
+				AAABAQAAVXNlcnMAAAAFAAAAAQEAAHJwYWdlAAAACwAA
+				AAEBAABEZXZlbG9wbWVudAAOAAAAAQEAAGRvYy1sYXlv
+				dXQtY3JmAAAKAAAAAQEAAC5naXRpZ25vcmUAABQAAAAB
+				BgAAEAAAACAAAAAwAAAARAAAAFwAAAAIAAAABAMAAIRc
+				AAAAAAAACAAAAAQDAACWxgMAAAAAAAgAAAAEAwAAWSkl
+				AAAAAAAIAAAABAMAAKLsTgYAAAAACAAAAAQDAAAs8k4G
+				AAAAABQAAAABBgAAjAAAAJwAAACsAAAAvAAAAMwAAAAI
+				AAAAAAQAAEHFR0WnEagtGAAAAAECAAABAAAAAAAAAA8A
+				AAAAAAAAAAAAAAAAAAAIAAAABAMAAAMAAAAAAAAABAAA
+				AAMDAAD1AQAACAAAAAEJAABmaWxlOi8vLwwAAAABAQAA
+				TWFjaW50b3NoIEhECAAAAAQDAAAAkIKW5wAAAAgAAAAA
+				BAAAQcUHeqAAAAAkAAAAAQEAAEVFREJDNDk1LURGNTIt
+				NDU2QS1CNDMxLUZCNjA3QkYwNEFEMRgAAAABAgAAgQAA
+				AAEAAADvEwAAAQAAAAAAAAAAAAAAAQAAAAEBAAAvAAAA
+				AAAAAAEFAAAaAAAAAQEAAE5TVVJMRG9jdW1lbnRJZGVu
+				dGlmaWVyS2V5AAAEAAAAAwMAAMvXBQDYAAAA/v///wEA
+				AAAAAAAAEQAAAAQQAABwAAAAAAAAAAUQAADcAAAAAAAA
+				ABAQAAAIAQAAAAAAAEAQAAD4AAAAAAAAAAIgAADUAQAA
+				AAAAAAUgAABEAQAAAAAAABAgAABUAQAAAAAAABEgAACI
+				AQAAAAAAABIgAABoAQAAAAAAABMgAAB4AQAAAAAAACAg
+				AAC0AQAAAAAAADAgAADgAQAAAAAAAAHAAAAoAQAAAAAA
+				ABHAAAAgAAAAAAAAABLAAAA4AQAAAAAAABDQAAAEAAAA
+				AAAAAOgBAIAMAgAAAAAAAA==
+				</data>
+				<key>FileURL</key>
+				<string>file:///Users/rpage/Development/doc-layout-crf/.gitignore</string>
+				<key>HasSecurityScope</key>
+				<true/>
+				<key>RelativePath</key>
+				<string>./.gitignore</string>
+				<key>TypeID</key>
+				<string>_CFileLocator</string>
+				<key>Version</key>
+				<integer>1</integer>
+			</dict>
+			<key>ItemName</key>
+			<string>.gitignore</string>
+			<key>ItemType</key>
+			<string>FileReference</string>
+			<key>UserOverrideItemName</key>
+			<true/>
+		</dict>
 		<key>41CA4A52-A1BB-48B4-9C22-42552802E71C</key>
 		<dict>
 			<key>ItemData</key>
@@ -206,6 +258,54 @@
 			<string>lib</string>
 			<key>ItemType</key>
 			<string>FolderReference</string>
+			<key>UserOverrideItemName</key>
+			<true/>
+		</dict>
+		<key>48A0743E-FF2F-4D8E-BA0B-66756D9B0FF2</key>
+		<dict>
+			<key>ItemData</key>
+			<dict>
+				<key>BookmarkData</key>
+				<data>
+				Ym9va+wCAAAAAAQQMAAAAB+Fk7kMAjuobujmm9mylUac
+				2C28EmvFc8t4swIcQgJy6AEAAAQAAAADAwAAAAgAKAUA
+				AAABAQAAVXNlcnMAAAAFAAAAAQEAAHJwYWdlAAAACwAA
+				AAEBAABEZXZlbG9wbWVudAAOAAAAAQEAAGRvYy1sYXlv
+				dXQtY3JmAAAKAAAAAQEAAGNvbG91ci5waHAAABQAAAAB
+				BgAAEAAAACAAAAAwAAAARAAAAFwAAAAIAAAABAMAAIRc
+				AAAAAAAACAAAAAQDAACWxgMAAAAAAAgAAAAEAwAAWSkl
+				AAAAAAAIAAAABAMAAKLsTgYAAAAACAAAAAQDAAAo7U4G
+				AAAAABQAAAABBgAAjAAAAJwAAACsAAAAvAAAAMwAAAAI
+				AAAAAAQAAEHFQSfN7P4SGAAAAAECAAABAAAAAAAAAA8A
+				AAAAAAAAAAAAAAAAAAAIAAAABAMAAAMAAAAAAAAABAAA
+				AAMDAAD1AQAACAAAAAEJAABmaWxlOi8vLwwAAAABAQAA
+				TWFjaW50b3NoIEhECAAAAAQDAAAAkIKW5wAAAAgAAAAA
+				BAAAQcUHeqAAAAAkAAAAAQEAAEVFREJDNDk1LURGNTIt
+				NDU2QS1CNDMxLUZCNjA3QkYwNEFEMRgAAAABAgAAgQAA
+				AAEAAADvEwAAAQAAAAAAAAAAAAAAAQAAAAEBAAAvAAAA
+				AAAAAAEFAADMAAAA/v///wEAAAAAAAAAEAAAAAQQAABw
+				AAAAAAAAAAUQAADcAAAAAAAAABAQAAAIAQAAAAAAAEAQ
+				AAD4AAAAAAAAAAIgAADUAQAAAAAAAAUgAABEAQAAAAAA
+				ABAgAABUAQAAAAAAABEgAACIAQAAAAAAABIgAABoAQAA
+				AAAAABMgAAB4AQAAAAAAACAgAAC0AQAAAAAAADAgAADg
+				AQAAAAAAAAHAAAAoAQAAAAAAABHAAAAgAAAAAAAAABLA
+				AAA4AQAAAAAAABDQAAAEAAAAAAAAAA==
+				</data>
+				<key>FileURL</key>
+				<string>file:///Users/rpage/Development/doc-layout-crf/colour.php</string>
+				<key>HasSecurityScope</key>
+				<true/>
+				<key>RelativePath</key>
+				<string>./colour.php</string>
+				<key>TypeID</key>
+				<string>_CFileLocator</string>
+				<key>Version</key>
+				<integer>1</integer>
+			</dict>
+			<key>ItemName</key>
+			<string>colour.php</string>
+			<key>ItemType</key>
+			<string>FileReference</string>
 			<key>UserOverrideItemName</key>
 			<true/>
 		</dict>
@@ -257,54 +357,6 @@
 			<key>UserOverrideItemName</key>
 			<true/>
 		</dict>
-		<key>589C56F7-44CB-41C3-A8DC-9306BB1DE3F5</key>
-		<dict>
-			<key>ItemData</key>
-			<dict>
-				<key>BookmarkData</key>
-				<data>
-				Ym9va+wCAAAAAAQQMAAAAB+Fk7kMAjuobujmm9mylUac
-				2C28EmvFc8t4swIcQgJy6AEAAAQAAAADAwAAAAgAKAUA
-				AAABAQAAVXNlcnMAAAAFAAAAAQEAAHJwYWdlAAAACwAA
-				AAEBAABEZXZlbG9wbWVudAAOAAAAAQEAAGRvYy1sYXlv
-				dXQtY3JmAAAKAAAAAQEAAGNvbG91ci5waHAAABQAAAAB
-				BgAAEAAAACAAAAAwAAAARAAAAFwAAAAIAAAABAMAAIRc
-				AAAAAAAACAAAAAQDAACWxgMAAAAAAAgAAAAEAwAAWSkl
-				AAAAAAAIAAAABAMAAKLsTgYAAAAACAAAAAQDAAAo7U4G
-				AAAAABQAAAABBgAAjAAAAJwAAACsAAAAvAAAAMwAAAAI
-				AAAAAAQAAEHFQSfN7P4SGAAAAAECAAABAAAAAAAAAA8A
-				AAAAAAAAAAAAAAAAAAAIAAAABAMAAAMAAAAAAAAABAAA
-				AAMDAAD1AQAACAAAAAEJAABmaWxlOi8vLwwAAAABAQAA
-				TWFjaW50b3NoIEhECAAAAAQDAAAAkIKW5wAAAAgAAAAA
-				BAAAQcUHeqAAAAAkAAAAAQEAAEVFREJDNDk1LURGNTIt
-				NDU2QS1CNDMxLUZCNjA3QkYwNEFEMRgAAAABAgAAgQAA
-				AAEAAADvEwAAAQAAAAAAAAAAAAAAAQAAAAEBAAAvAAAA
-				AAAAAAEFAADMAAAA/v///wEAAAAAAAAAEAAAAAQQAABw
-				AAAAAAAAAAUQAADcAAAAAAAAABAQAAAIAQAAAAAAAEAQ
-				AAD4AAAAAAAAAAIgAADUAQAAAAAAAAUgAABEAQAAAAAA
-				ABAgAABUAQAAAAAAABEgAACIAQAAAAAAABIgAABoAQAA
-				AAAAABMgAAB4AQAAAAAAACAgAAC0AQAAAAAAADAgAADg
-				AQAAAAAAAAHAAAAoAQAAAAAAABHAAAAgAAAAAAAAABLA
-				AAA4AQAAAAAAABDQAAAEAAAAAAAAAA==
-				</data>
-				<key>FileURL</key>
-				<string>file:///Users/rpage/Development/doc-layout-crf/colour.php</string>
-				<key>HasSecurityScope</key>
-				<true/>
-				<key>RelativePath</key>
-				<string>./colour.php</string>
-				<key>TypeID</key>
-				<string>_CFileLocator</string>
-				<key>Version</key>
-				<integer>1</integer>
-			</dict>
-			<key>ItemName</key>
-			<string>colour.php</string>
-			<key>ItemType</key>
-			<string>FileReference</string>
-			<key>UserOverrideItemName</key>
-			<true/>
-		</dict>
 		<key>6FDDDAE5-FD57-40BF-8A1F-BF19C0E2F1C1</key>
 		<dict>
 			<key>ItemData</key>
@@ -348,6 +400,54 @@
 			</dict>
 			<key>ItemName</key>
 			<string>train.php</string>
+			<key>ItemType</key>
+			<string>FileReference</string>
+			<key>UserOverrideItemName</key>
+			<true/>
+		</dict>
+		<key>BB2AE17B-92AE-4B27-80B8-FC4FEABD68DF</key>
+		<dict>
+			<key>ItemData</key>
+			<dict>
+				<key>BookmarkData</key>
+				<data>
+				Ym9va+wCAAAAAAQQMAAAAIY/KJg72IULY62fUFVec4Fq
+				iwZaiNSwqc10NRfRGtA/6AEAAAQAAAADAwAAAAgAKAUA
+				AAABAQAAVXNlcnMAAAAFAAAAAQEAAHJwYWdlAAAACwAA
+				AAEBAABEZXZlbG9wbWVudAAOAAAAAQEAAGRvYy1sYXlv
+				dXQtY3JmAAAJAAAAAQEAAHJvZC50cmFpbgAAABQAAAAB
+				BgAAEAAAACAAAAAwAAAARAAAAFwAAAAIAAAABAMAAIRc
+				AAAAAAAACAAAAAQDAACWxgMAAAAAAAgAAAAEAwAAWSkl
+				AAAAAAAIAAAABAMAAKLsTgYAAAAACAAAAAQDAAB0QlEG
+				AAAAABQAAAABBgAAjAAAAJwAAACsAAAAvAAAAMwAAAAI
+				AAAAAAQAAEHFSa93R4xKGAAAAAECAAABAAAAAAAAAA8A
+				AAAAAAAAAAAAAAAAAAAIAAAABAMAAAMAAAAAAAAABAAA
+				AAMDAAD1AQAACAAAAAEJAABmaWxlOi8vLwwAAAABAQAA
+				TWFjaW50b3NoIEhECAAAAAQDAAAAkIKW5wAAAAgAAAAA
+				BAAAQcUHeqAAAAAkAAAAAQEAAEVFREJDNDk1LURGNTIt
+				NDU2QS1CNDMxLUZCNjA3QkYwNEFEMRgAAAABAgAAgQAA
+				AAEAAADvEwAAAQAAAAAAAAAAAAAAAQAAAAEBAAAvAAAA
+				AAAAAAEFAADMAAAA/v///wEAAAAAAAAAEAAAAAQQAABw
+				AAAAAAAAAAUQAADcAAAAAAAAABAQAAAIAQAAAAAAAEAQ
+				AAD4AAAAAAAAAAIgAADUAQAAAAAAAAUgAABEAQAAAAAA
+				ABAgAABUAQAAAAAAABEgAACIAQAAAAAAABIgAABoAQAA
+				AAAAABMgAAB4AQAAAAAAACAgAAC0AQAAAAAAADAgAADg
+				AQAAAAAAAAHAAAAoAQAAAAAAABHAAAAgAAAAAAAAABLA
+				AAA4AQAAAAAAABDQAAAEAAAAAAAAAA==
+				</data>
+				<key>FileURL</key>
+				<string>file:///Users/rpage/Development/doc-layout-crf/rod.train</string>
+				<key>HasSecurityScope</key>
+				<true/>
+				<key>RelativePath</key>
+				<string>./rod.train</string>
+				<key>TypeID</key>
+				<string>_CFileLocator</string>
+				<key>Version</key>
+				<integer>1</integer>
+			</dict>
+			<key>ItemName</key>
+			<string>rod.train</string>
 			<key>ItemType</key>
 			<string>FileReference</string>
 			<key>UserOverrideItemName</key>
