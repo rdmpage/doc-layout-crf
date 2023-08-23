@@ -8,18 +8,19 @@ Need a CSV with information on each file used for training, particularly source 
 
 Possible files
 
-ID | DOI | License | URL
+ID | DOI | URL | License | PDF
 --|--|--|--
-zt01991p027 | 10.11646/zootaxa.1991.1.1 | “free” | https://www.mapress.com/zootaxa/2009/f/zt01991p027.pdf
-zt03796p593 | 10.11646/zootaxa.3796.3.10 | “free” | https://www.mapress.com/zootaxa/2014/f/zt03796p593.pdf
-PK-184-067_article-71045_en_1 | 10.3897/phytokeys.184.71045 | CC-BY | https://phytokeys.pensoft.net/article/71045/download/pdf/
-Cassidafromborneo | | “free” | http://www.cassidae.uni.wroc.pl/Cassidafromborneo.pdf
-Minkina_Kral_2022_Rhyparus_ASZB | | “free” | https://www.zoospol.cz/wp-content/uploads/2022/12/Minkina_Kral_2022_Rhyparus_ASZB.pdf
-129ebinger_new_senegalia | | “open access” | https://www.phytologia.org/uploads/2/3/4/2/23422706/99_2_126-129ebinger_new_senegalia.pdf
-proccas_v58_n08 | | “free” | https://researcharchive.calacademy.org/research/scipubs/pdfs/v58/proccas_v58_n08.pdf
-Kral_et_al_Enoplotrupes-Enoplotrupes-apatani-sp.-nov | “free” | https://www.zoospol.cz/wp-content/uploads/2021/05/
-s6 | 10.5343/bms.2017.1119 | “Free content” | https://www.ingentaconnect.com/search/download?pub=infobike://umrsmas/bullmar/2018/00000094/00000001/art00006&mimetype=application/pdf
-
+zt01991p027 | 10.11646/zootaxa.1991.1.1 | | “free” | https://www.mapress.com/zootaxa/2009/f/zt01991p027.pdf
+zt03796p593 | 10.11646/zootaxa.3796.3.10 | | “free” | https://www.mapress.com/zootaxa/2014/f/zt03796p593.pdf
+PK-184-067_article-71045_en_1 | 10.3897/phytokeys.184.71045 | |CC-BY | https://phytokeys.pensoft.net/article/71045/download/pdf/
+Cassidafromborneo | | | “free” | http://www.cassidae.uni.wroc.pl/Cassidafromborneo.pdf
+Minkina_Kral_2022_Rhyparus_ASZB | | | “free” | https://www.zoospol.cz/wp-content/uploads/2022/12/Minkina_Kral_2022_Rhyparus_ASZB.pdf
+129ebinger_new_senegalia | | | “open access” | https://www.phytologia.org/uploads/2/3/4/2/23422706/99_2_126-129ebinger_new_senegalia.pdf
+proccas_v58_n08 | | | “free” | https://researcharchive.calacademy.org/research/scipubs/pdfs/v58/proccas_v58_n08.pdf
+Kral_et_al_Enoplotrupes-Enoplotrupes-apatani-sp.-nov | | | “free” | https://www.zoospol.cz/wp-content/uploads/2021/05/
+s6 | 10.5343/bms.2017.1119 | | “Free content” | https://www.ingentaconnect.com/search/download?pub=infobike://umrsmas/bullmar/2018/00000094/00000001/art00006&mimetype=application/pdf
+S26 | | https://www.ingentaconnect.com/contentone/umrsmas/bullmar/2002/00000071/00000002/art00026 | “Free content” | https://www.ingentaconnect.com/search/download?pub=infobike://umrsmas/bullmar/2002/00000071/00000002/art00026&mimetype=application/pdf 
+| | 10.11646/zootaxa.5336.2.2 | https://www.mapress.com/zt/article/view/zootaxa.5336.2.2/51703 | CC-BY-NC | 
 
 
 ## PDFs
