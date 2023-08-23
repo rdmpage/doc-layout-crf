@@ -97,6 +97,17 @@ class Line
 		return $this->isPointOnLine($pt_b_first)
 			|| ($this->isPointRightOfLine($pt_b_first) xor $this->isPointRightOfLine($pt_b_second));
 	}	
+	
+	//----------------------------------------------------------------------------------------------
+	function getLength ()
+	{
+		$length = sqrt( 
+			($this->x1 - $this->x0) * ($this->x1 - $this->x0)
+			+ ($this->y1 - $this->y0) * ($this->y1 - $this->y0));
+			
+		return $length;
+	}	
+	
 
 }
 

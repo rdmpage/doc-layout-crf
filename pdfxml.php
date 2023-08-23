@@ -74,7 +74,7 @@ function parse_xml($filename)
 					(Double)($attributes['x'] + $attributes['width']),
 					(Double)($attributes['y'] + $attributes['height'])				
 				);
-				$block->href = $attributes['href'];
+				$block->href = '../' . $attributes['href'];
 				$block->type = 'image';
 				
 				$page->blocks[$block_counter] = $block;
@@ -91,8 +91,7 @@ function parse_xml($filename)
 			$block = new stdclass;
 			$block->type = 'text';
 			$block->bbox = array($page->width, $page->height,0,0);
-		
-		
+				
 			// Get lines of text
 			$lines = $xpath->query ('TEXT', $block_tag);
 		
@@ -127,7 +126,7 @@ function parse_xml($filename)
 					
 					if (isset($n->firstChild->nodeValue))
 					{
-						$text 			= $n->firstChild->nodeValue;
+						$text 				= $n->firstChild->nodeValue;
 						
 						$page->words[] 		= $text;
 						$page->bbox[] 		= $bbox;						

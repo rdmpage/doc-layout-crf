@@ -1,4 +1,21 @@
 
 .DS_Store
 
+*.pdf
+*.xml
+*.vec
+*.png
+*.jpeg
+*.jpg
+*.json
+*.html
+*.jp2
+*.zip
+
+*.data
+*.out
+
 /junk/
+/play/
+/fail/
+/training/

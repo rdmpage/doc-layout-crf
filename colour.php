@@ -51,6 +51,7 @@ foreach ($files as $filename)
 			$html .=  '<html>';
 			$html .=  '<head>';
 			$html .=  '<style>';
+			$html .=  'body { padding:1em;background:rgb(228,228,228);}';
 			$html .=  '/* https://docs.google.com/document/d/1frGmzYOHnVRWAwTOuuPfc3KVAwu-XKdkFSbpLfy78RI/edit#heading=h.iz6rewv3v747 */';
 			$html .=  '.Paragraph { background:rgb(221,227,221); opacity:1.0; }';
 			$html .=  '.Header { background:rgb(234,183,172); opacity:1.0; }';
@@ -80,7 +81,7 @@ foreach ($files as $filename)
 			
 			
 	
-			$html .=  '<div style="position:relative;width:' . ($scale * $tokens->width) . 'px;height:' . ($scale * $tokens->height)  . 'px;border:1px solid rgb(228,228,228);margin:10px;">';		
+			$html .=  '<div style="position:relative;width:' . ($scale * $tokens->width) . 'px;height:' . ($scale * $tokens->height)  . 'px;border:1px solid rgb(228,228,228);background:white;margin:10px;">';		
 			
 			if (1)
 			{
@@ -97,9 +98,9 @@ foreach ($files as $filename)
 						. 'height:' . $height . 'px;'						
 						. '">';
 					
-					if ($block->type == 'image')
+					if ($block->type == 'image' && isset($block->href))
 					{
-						$html .= '<img src="../' . $block->href . '" width="' . $width . '">';
+						$html .= '<img src="' . $block->href . '" width="' . $width . '">';
 					}
 					
 					$html .= '</div>';			

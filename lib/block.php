@@ -300,6 +300,49 @@ function is_centred_within($bounding_rect, $rect, $slop = 10)
 	return $centred;
 }
 
+//----------------------------------------------------------------------------------------
+// trivial test of below, is rect_above lower margin above top of rect_below? 
+function isBelow($rect_above, $rect_below)
+{
+	$below = true;
+	
+	if ($below)
+	{
+		if ($rect_above->intersectsRect($rect_below))
+		{
+			$below = false; // one can't be below another if they intersect
+		}
+	}
+	
+	if ($below)
+	{
+		$below = ($rect_above->y + $rect_above->h) < $rect_below->y;
+	}
+
+	return $below;
+}
+
+
+//----------------------------------------------------------------------------------------
+// Distance between centres of two rects
+function centroid_distance($rect1, $rect2)
+{
+	global $svg;
+	
+	$d = 0;	
+	
+	$centre1 = $rect1->getCentre();
+	$centre2 = $rect2->getCentre();
+	
+	$line = new Line($centre1->x, $centre1->y, $centre2->x, $centre2->y);
+	
+	$svg .= $line->toSvg();	
+	
+	$d = $line->getLength();
+
+	return $d;
+}
+
 
 
 //----------------------------------------------------------------------------------------
@@ -376,7 +419,7 @@ if (0)
 	
 	}
 	
-	if (1)
+	if (0)
 	{
 
 		$top_left_bb = new BBox(100, 100, 200, 120); 
@@ -487,6 +530,27 @@ if (0)
 		$svg .= $top->toSvg();
 		
 	}
+	
+	if (1)
+	{
+		$figure_bb = new BBox(100, 100, 500, 200); 
+		$figure = $figure_bb->toRectangle();
+		$figure->name = 'figure';
+	
+		$caption_bb = new BBox(100, 400, 500, 450); 
+		$caption = $caption_bb->toRectangle();
+		$caption->name = 'caption';
+		
+		$svg .= $figure->toSvg();
+		$svg .= $caption->toSvg();
+		
+		if (isBelow($figure, $caption))
+		{
+			echo "is below\n";
+			echo "d=" . centroid_distance($figure, $caption);
+		}
+	}
+	
 	
 
 

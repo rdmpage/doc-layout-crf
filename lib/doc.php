@@ -421,7 +421,7 @@ function doc_fonts(&$doc, $debug = false)
 	}
 
 	// Convert font sizes to CSS names
-	$doc->font_map = cluster_sizes($sizes, 5);
+	$doc->font_map = cluster_sizes($sizes, 7);
 
 	if ($debug)
 	{
@@ -720,13 +720,44 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 		// by default we just look for text that is below an image
 		foreach ($page->blocks as $block_id => $block)
 		{
+			// clear flag by default
 			if (!isset($block_features[$block_id]['blockImageAdjacent']))
 			{
 				$block_features[$block_id]['blockImageAdjacent'] = 0;
 			}
 		
+			// if block is an image we look for nearest text block below image
 			if ($block->type == 'image')
 			{
+				$min_distance = $page->width; // maximum distance (should really be page diagonal)
+				$closest_id = $block_id; // nearest block is itself
+				
+				$image_rect = $block_rects[$block_id];
+								
+				foreach ($page->blocks as $other_id => $other_block)
+				{
+					if ($block_id != $other_id)
+					{
+						if (isBelow($image_rect, $block_rects[$other_id]))
+						{
+							$d = centroid_distance($image_rect, $block_rects[$other_id]);
+							
+							if ($d < $min_distance)
+							{
+								$min_distance = $d;
+								$closest_id = $other_id;
+							}
+						}					
+					}
+				}
+				
+				// do we have a block below the image rect?
+				if ($closest_id != $block_id)
+				{
+					$block_features[$closest_id]['blockImageAdjacent'] = 1;
+				}			
+			
+				/*
 				// inflate
 				$image_rect = $block_rects[$block_id];
 				
@@ -743,6 +774,7 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 						}
 					}
 				}
+				*/
 			}
 		}
 		
