@@ -89,7 +89,6 @@ $feature_templates['blockImageAdjacent'] =
 UCOUNT:%x[0,FID]
 UCOUNT:%x[1,FID]';
 
-
 // before and next
 $feature_templates['pageStatus'] =
 'UCOUNT:%x[-1,FID]
@@ -114,11 +113,20 @@ UCOUNT:%x[0,FID]
 UCOUNT:%x[1,FID]
 UCOUNT:%x[2,FID]';
 
+// two lines above and below
+$feature_templates['possiblePlates'] =
+'UCOUNT:%x[-2,FID]
+UCOUNT:%x[-1,FID]
+UCOUNT:%x[0,FID]
+UCOUNT:%x[1,FID]
+UCOUNT:%x[2,FID]';
+
 // simple presence/absence
 $feature_templates['email'] = 'UCOUNT:%x[0,FID]';
 $feature_templates['http'] = 'UCOUNT:%x[0,FID]';
 $feature_templates['urn'] = 'UCOUNT:%x[0,FID]';
 $feature_templates['doi'] = 'UCOUNT:%x[0,FID]';
+$feature_templates['orcid'] = 'UCOUNT:%x[0,FID]';
 
 // two lines above and below
 $feature_templates['year'] = 
@@ -194,7 +202,20 @@ $feature_templates['maleName'] =
 UCOUNT:%x[0,FID]
 UCOUNT:%x[1,FID]';
 
+//----------------------------------------------------------------------------------------
+// Domain specific
+
 $feature_templates['nomenclature'] = 'UCOUNT:%x[0,FID]';
+
+$feature_templates['latlon'] =
+'UCOUNT:%x[-1,FID]
+UCOUNT:%x[0,FID]
+UCOUNT:%x[1,FID]';
+
+$feature_templates['acronym'] =
+'UCOUNT:%x[-1,FID]
+UCOUNT:%x[0,FID]
+UCOUNT:%x[1,FID]';
 
 $feature_templates['label'] = "";
 
@@ -883,8 +904,7 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				}
 				$line_indents[$line_id] = $indent;
 			}			
-		}
-		
+		}		
 		
 		//--------------------------------------------------------------------------------
 		// how wide is line relative to block?
@@ -903,8 +923,6 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				}	
 				
 				$line_widths[$line_id] = round(100 * ($maxx - $minx) / $block_rects[$block_id]->w, 0);
-							
-		
 			}
 		}	
 		
@@ -943,7 +961,74 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				
 				$line_density[$line_id] = round(100 * $token_area / $line_area, 0);
 			}
-		}			
+		}
+		
+		//--------------------------------------------------------------------------------
+		// Are all lines within a block centered w.r.t. that block?
+		// combine this with block's alignment (CENTER OR JUSTIFY) to determne whether
+		// a text element is centred 
+
+		$block_lines_centred = array();
+		
+		//echo "\nPage $page_counter\n";
+		
+		foreach ($block_lines as $block_id => $lines)
+		{
+			//echo "Block $block_id\n";
+			
+			$block_lines_centred[$block_id] = true;
+		
+			$enclosing_rect = $block_rects[$block_id];
+			
+			foreach ($lines as $line_id)
+			{
+				$line_rect = null;
+				
+				foreach ($lines_words[$line_id] as $word_id)
+				{
+					//echo $page->words[$word_id] . ' ';
+				
+					$token_rect = new Rectangle(
+						$page->bbox[$word_id][0],
+						$page->bbox[$word_id][1],
+						$page->bbox[$word_id][2] - $page->bbox[$word_id][0],
+						$page->bbox[$word_id][3] - $page->bbox[$word_id][1],						
+						);
+						
+					if ($line_rect)
+					{
+						$line_rect->merge($token_rect);
+					}
+					else
+					{
+						$line_rect = $token_rect;
+					}
+				}
+				
+				//echo "\n";
+				
+				// test
+				if (is_centred_within($enclosing_rect, $line_rect, $doc->modal_font_size))
+				{
+					//echo join(",", $enclosing_rect->toArray()) . "\n";
+					//echo join(",", $line_rect->toArray()) . "\n";				
+					//echo "$line_id centerd\n\n";
+				}
+				else
+				{
+					$block_lines_centred[$block_id] = false;
+				}	
+				
+			}
+			
+			if ($debug && $block_lines_centred[$block_id])
+			{
+				echo "Text in block $block_id is centred\n";
+			}
+		}	
+		
+		
+					
 		
 		//--------------------------------------------------------------------------------
 		// generate features
@@ -1082,6 +1167,13 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 					$line_features[$line_id]['doi'] = 1;
 				}
 				
+				// ORCID
+				$line_features[$line_id]['orcid'] = 0;
+				if (preg_match("/(orcid.org)/", $line_text))
+				{
+					$line_features[$line_id]['orcid'] = 1;
+				}				
+				
 				// year
 				$line_features[$line_id]['year'] = 0;
 				if (preg_match("/(17|18|19|20)[0-9][0-9]/", $line_text))
@@ -1108,34 +1200,92 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				// page numbers (e.g., in a citation)
 				if (preg_match('/([0-9]\s*[\-|—|–]\s*[0-9])|(\d+\s*pp\.)/u', $line_text))
 				{
-					$line_features[$line_id]['possiblePage'] = 1;
+					$line_features[$line_id]['possiblePage'] = 'PAGES';
 				}
 				else
 				{
-					$line_features[$line_id]['possiblePage'] = 0;				
+					$line_features[$line_id]['possiblePage'] = 'no';				
 				}
 				
-				// line ends in a number
+				// plates
+				if (preg_match('/(pls?\.)/iu', $line_text))
+				{
+					$line_features[$line_id]['possiblePlates'] = 'PLATES';
+				}
+				else
+				{
+					$line_features[$line_id]['possiblePlates'] = 'no';				
+				}
+								
+				//------------------------------------------------------------------------
+				// domain specific	
+								
+				// line ends in a number (e.g., keys)
 				$line_features[$line_id]['lineEndDigit'] = 0;
 				if (preg_match('/\d+$/', $line_text))
 				{
 					$line_features[$line_id]['lineEndDigit'] = 1;
 				}
 				
-				//------------------------------------------------------------------------
-				// domain specific	
+				// latitude longitude
+				// here we want just to detect possible latitude and/or longitudes,
+				// not parse them, hence we just try and match one hemisphere, not the
+				// complete lat/lon pair
+								
+				$line_features[$line_id]['latlon'] = 'no';
+
+				// N11°23'59"E76°44'06" 
+				// N11°23'59"
+				// 28°13’49”S
+				// 17°23’S
+				// 17°45'46"N
+				// 17°59'06.60"N
+				// 10°12′1′′S
+				if (preg_match('/[N|S|W|E]?\d+[°|º]\d+[\'|’|′](\d+(\.\d+)?("|”|′′|’’))?[N|S|W|E]?/u', $line_text))
+				{
+					$line_features[$line_id]['latlon'] = 'LATLON';
+				}
 				
+				// S15.97188°
+				if (preg_match('/[N|S|W|E]\d+\.\d+°/u', $line_text))
+				{
+					$line_features[$line_id]['latlon'] = 'LATLON';
+				}
+
+				// 57o29.00'W
+				if (preg_match('/\d+o\d+(\.\d+)?\'[N|S|W|E]/u', $line_text))
+				{
+					$line_features[$line_id]['latlon'] = 'LATLON';
+				}
+
+				// 9∞ 11.1'S
+				if (preg_match('/\d+∞\s*\d+(\.\d+)?\'[N|S|W|E]/u', $line_text))
+				{
+					$line_features[$line_id]['latlon'] = 'LATLON';
+				}
 				
+				// acronyms (e.g., museum codes)
+				$line_features[$line_id]['acronym'] = 0;
+				
+				if (preg_match('/[a-z]/u', $line_text))
+				{
+					// line is mixed case (we want to avoid matching things such as 
+					// section headings that might be all caps)
+					if (preg_match('/[A-Z]{3,}/', $line_text))
+					{
+						$line_features[$line_id]['acronym'] = 'ACRONYM';
+					}
+				}
+
 				// nomenclature annotations (where can we get a list)?
 				if (preg_match('/(new\s+(combination|family|genus|species))|((comb|fam|gen|sp)\.\s+n(ov)?\.)/i', $line_text))
 				{
-					$line_features[$line_id]['nomenclature'] = 1;
+					$line_features[$line_id]['nomenclature'] = 'NOMEN';
 				}
 				else
 				{
-					$line_features[$line_id]['nomenclature'] = 0;				
-				}								
-												
+					$line_features[$line_id]['nomenclature'] = 'no';				
+				}												
 
 				//------------------------------------------------------------------------
 				// gazetter (try all tokens in line)
@@ -1180,13 +1330,29 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				// line width
 				$line_features[$line_id]['lineWidth'] = $line_widths[$line_id];	
 				
-				// line indent (think about how to handle centred text)
+				// by default assume text is left-aligned, possibly with an indent				
 				$line_features[$line_id]['alignmentStatus'] = 'ALIGNEDLEFT';			
 				if ($line_indents[$line_id] == 1)
 				{
 					$line_features[$line_id]['alignmentStatus'] = 'INDENT';		
 				}
-								
+				
+				// if block line belongs to is centred or justified, check whether text 
+				// is centred
+				switch ($block_features[$block_id]['blockJustifySelf'])
+				{
+					case 'CENTER':
+					case 'STRETCH':
+						if ($block_lines_centred[$block_id])
+						{
+							$line_features[$line_id]['alignmentStatus'] = 'CENTER';
+						}
+						break;
+					
+					default:
+						break;				
+				}
+												
 				//------------------------------------------------------------------------
 				// features of block line belongs too
 				if ($block_start)
@@ -1198,18 +1364,21 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 					$line_features[$line_id]['blockStatus'] = 'BLOCKIN';				
 				}
 				
+				// Font size
 				$fontSize = $block_features[$block_id]['fontSize'];
 				$fontSize = strtoupper(str_replace('-', '', $fontSize));
 				
 				$line_features[$line_id]['fontSize'] = $fontSize;
 										
+				// Repetitive pattenr across pages (this is how we detect header/footers)
 				$line_features[$line_id]['repetitivePattern'] = $block_features[$block_id]['repetitivePattern'];						
 				
+				// Position of block on page
 				$line_features[$line_id]['blockAlignSelf'] = $block_features[$block_id]['blockAlignSelf'];
 				$line_features[$line_id]['blockJustifySelf'] = $block_features[$block_id]['blockJustifySelf'];
 				
+				// Are we adjacent to an image?
 				$line_features[$line_id]['blockImageAdjacent'] = $block_features[$block_id]['blockImageAdjacent'];
-
 
 				//------------------------------------------------------------------------
 				// features of page this line belongs too

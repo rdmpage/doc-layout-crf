@@ -181,11 +181,16 @@ function parse_hocr($filename)
 
 //----------------------------------------------------------------------------------------
 
-$basedir = '823dd6fb73de0c69db73040a5c93d70590212c3d_hocr';
-//$basedir = 'biostor-275342_hocr';
-
-$basedir = 'biostor-172016_hocr';
-$basedir = 'entomologisk-tidskrift-90-019-051_hocr';
+$filename = '';
+if ($argc < 2)
+{
+	echo "Usage: hocr.php <basedir>\n";
+	exit(1);
+}
+else
+{
+	$basedir = $argv[1];
+}
 
 $filename = $basedir . '.html';
 

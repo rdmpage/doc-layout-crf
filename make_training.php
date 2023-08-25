@@ -18,10 +18,25 @@ $basedir = 'training';
 
 $dirs = array
 (
+// Zootaxa
 'harmer2008',
 'zt03796p593',
 'zt01991p027',
+
+// Phytokeys
 'PK-184-067_article-71045_en_1',
+
+// Acta Zool. Acad. Sci. Hung.
+'7459',
+'ActaZH_2017_Vol_63_1_71',
+'ActaZH_2017_Vol_63_4_429',
+
+// Zoologische Mededelingen
+'ZM1989063006',
+'ZM82-02_Bruggen',
+
+// Shilap
+'71-82', // has issues with text overlapping figures (figure labelling)
 );
 
 // make sure we start with a fesh template

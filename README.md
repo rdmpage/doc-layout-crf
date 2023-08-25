@@ -21,7 +21,11 @@ Kral_et_al_Enoplotrupes-Enoplotrupes-apatani-sp.-nov | | | “free” | https://
 s6 | 10.5343/bms.2017.1119 | | “Free content” | https://www.ingentaconnect.com/search/download?pub=infobike://umrsmas/bullmar/2018/00000094/00000001/art00006&mimetype=application/pdf
 S26 | | https://www.ingentaconnect.com/contentone/umrsmas/bullmar/2002/00000071/00000002/art00026 | “Free content” | https://www.ingentaconnect.com/search/download?pub=infobike://umrsmas/bullmar/2002/00000071/00000002/art00026&mimetype=application/pdf 
 | | 10.11646/zootaxa.5336.2.2 | https://www.mapress.com/zt/article/view/zootaxa.5336.2.2/51703 | CC-BY-NC | 
-
+7459 | 10.17109/AZH.68.1.23.2022 | https://ojs.mtak.hu/index.php/actazool/article/view/7459| CC-BY-NC | https://ojs.mtak.hu/index.php/actazool/article/view/7459/6676
+ActaZH_2017_Vol_63_4_429 | 10.17109/AZH.63.4.429.2017 | https://ojs.mtak.hu/index.php/actazool/article/view/948 | CC-BY-NC | http://actazool.nhmus.hu/63/4/ActaZH_2017_Vol_63_4_429.pdf
+ActaZH_2017_Vol_63_1_71 | 10.17109/AZH.63.1.71.2017 | https://ojs.mtak.hu/index.php/actazool/article/view/1274 | CC-BY-NC | http://actazool.nhmus.hu/63/1/ActaZH_2017_Vol_63_1_71.pdf 
+ActaZH_2017_Vol_63_4_377| 10.17109/AZH.63.4.377.2017 | https://ojs.mtak.hu/index.php/actazool/article/view/1170 | CC-BY-NC| http://actazool.nhmus.hu/63/4/ActaZH_2017_Vol_63_4_377.pdf
+ZM1989063006 | | https://repository.naturalis.nl/pub/318136 | CC-BY | https://repository.naturalis.nl/pub/318136/ZM1989063006.pdf
 
 ## PDFs
 

@@ -271,7 +271,11 @@ function cluster_sizes($sizes, $num_clusters = 3)
 		{
 			foreach ($orig_peaks[$peak_number] as $order)
 			{
-				$map[$sorted_sizes[$order]] = $font_size_names[$peak_names[$peak_number]];
+				$index = $peak_names[$peak_number];
+				$index = min(5, $index);
+				$index = max(-5, $index);
+			
+				$map[$sorted_sizes[$order]] = $font_size_names[$index];
 			}
 		}
 		
@@ -313,8 +317,9 @@ function cluster_sizes($sizes, $num_clusters = 3)
 // if it is larger, it gets the largest size
 function font_classify($font_map, $font_size)
 {
-	// CSS names for fonts	
 	$font_size_names = array(
+		-5 => 'xx-small',
+		
 		-4 => 'xx-small',
 		-3 => 'xx-small',
 		-2 => 'x-small',
@@ -323,8 +328,11 @@ function font_classify($font_map, $font_size)
 		 1 => 'large',
 		 2 => 'x-large',
 		 3 => 'xx-large',
-		 4 => 'xx-large', 
-	);
+		 4 => 'xx-large',
+		 
+		 5 => 'xx-large',
+		  
+	);	
 	
 	$names_to_index = array();
 	foreach ($font_size_names as $k => $v)

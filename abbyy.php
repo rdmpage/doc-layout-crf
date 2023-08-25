@@ -338,8 +338,16 @@ function parse_abbyy($filename)
 //----------------------------------------------------------------------------------------
 
 
-$basedir = 'biostor-146631_abbyy';
-//$basedir = 'proceedings-california-academy-sciences-58-121-131_abbyy';
+$filename = '';
+if ($argc < 2)
+{
+	echo "Usage: abbyy.php <basedir>\n";
+	exit(1);
+}
+else
+{
+	$basedir = $argv[1];
+}
 
 $filename = $basedir . '.xml';
 

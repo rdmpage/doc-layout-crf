@@ -29,44 +29,66 @@ foreach ($files as $filename)
 		
 		$scale = 600 / $tokens->width;
 
-		if (0)
-		{
-			// raw words
-			$html = '';
+		$html = '';
+	
+		$html .=  '<html>';
+		$html .=  '<body>';
+
+		$html .=  '<div style="position:relative;width:' . ($scale * $tokens->width) . 'px;height:' . ($scale * $tokens->height)  . 'px;border:1px solid rgb(228,228,228);margin:10px;">';		
 		
-			$html .=  '<html>';
-			$html .=  '<body>';
-	
-			$html .=  '<div style="position:relative;width:' . ($scale * $tokens->width) . 'px;height:' . ($scale * $tokens->height)  . 'px;border:1px solid rgb(228,228,228);margin:10px;">';		
-						
-	
-			foreach ($tokens->words as $word_id => $text)
+		if (1)
+		{
+
+			foreach ($tokens->blocks as $block_id => $block)
 			{
-				$left 	= $scale * $tokens->bbox[$word_id][0];
-				$top 	= $scale * $tokens->bbox[$word_id][1];
-				$width 	= $scale * ($tokens->bbox[$word_id][2] - $tokens->bbox[$word_id][0]);
-				$height = $scale * ($tokens->bbox[$word_id][3] - $tokens->bbox[$word_id][1]);
 			
-				$html .=  '<div style="background:rgb(221,227,221); opacity:1.0;position:absolute;left:' . $left . 'px;'
+				$left 	= $scale * $block->bbox[0];
+				$top 	= $scale * $block->bbox[1];
+				$width 	= $scale * ($block->bbox[2] - $block->bbox[0]);
+				$height = $scale * ($block->bbox[3] - $block->bbox[1]);
+
+				$html .=  '<div style="background:rgb(221,227,221); opacity:0.4;position:absolute;left:' . $left . 'px;'
 					. 'top:' . $top . 'px;'
 					. 'width:' . $width . 'px;'
 					. 'height:' . $height . 'px;'						
-					. '"></div>';
-		
-			}
-	
-			$html .=  '</div>';
-			$html .=  '</body>';			
-			$html .=  '</html>';	
+					. '">';
+					
+				if ($block->type == 'image')
+				{
+					$html .= '<img src="../' . $block->href . '" width="' . $width . '">';
+				}
+					
+				$html .= '</div>';
 			
-			$html_filename = str_replace('.json', '.html', $tokens_filename);
-		
-			file_put_contents($html_filename , $html);
-
+			}
 		}
+
+		foreach ($tokens->words as $word_id => $text)
+		{
+			$left 	= $scale * $tokens->bbox[$word_id][0];
+			$top 	= $scale * $tokens->bbox[$word_id][1];
+			$width 	= $scale * ($tokens->bbox[$word_id][2] - $tokens->bbox[$word_id][0]);
+			$height = $scale * ($tokens->bbox[$word_id][3] - $tokens->bbox[$word_id][1]);
+		
+			$html .=  '<div style="background:rgb(221,227,221); opacity:1.0;position:absolute;left:' . $left . 'px;'
+				. 'top:' . $top . 'px;'
+				. 'width:' . $width . 'px;'
+				. 'height:' . $height . 'px;'						
+				. '"></div>';
+	
+		}
+
+		$html .=  '</div>';
+		$html .=  '</body>';			
+		$html .=  '</html>';	
+		
+		$html_filename = str_replace('.json', '-blocks.html', $tokens_filename);
+	
+		file_put_contents($html_filename , $html);
 		
 		// known blocks
-		if (1)
+		/*
+		if (0)
 		{
 			$html = '';
 		
@@ -83,7 +105,7 @@ foreach ($files as $filename)
 				$width 	= $scale * ($block->bbox[2] - $block->bbox[0]);
 				$height = $scale * ($block->bbox[3] - $block->bbox[1]);
 
-				$html .=  '<div style="background:rgb(221,227,221); opacity:1.0;position:absolute;left:' . $left . 'px;'
+				$html .=  '<div style="background:rgb(221,227,221); opacity:0.5;position:absolute;left:' . $left . 'px;'
 					. 'top:' . $top . 'px;'
 					. 'width:' . $width . 'px;'
 					. 'height:' . $height . 'px;'						
@@ -106,6 +128,7 @@ foreach ($files as $filename)
 		
 			file_put_contents($html_filename , $html);			
 		}
+		*/
 		
 		/*
 		if (1)

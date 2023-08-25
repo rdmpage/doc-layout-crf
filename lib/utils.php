@@ -63,4 +63,3 @@ function geom_sim($rect0, $rect1, $debug = false)
 
 
 ?>
-

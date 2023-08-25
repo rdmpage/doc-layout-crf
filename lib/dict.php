@@ -83,4 +83,3 @@ sub readDict {
   close (DATA);
 }
 */
-
