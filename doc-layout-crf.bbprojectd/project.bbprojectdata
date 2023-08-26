@@ -5,8 +5,10 @@
 	<key>HierarchyData</key>
 	<array>
 		<string>418922EB-D6F6-41E3-BF37-F563C017F310</string>
+		<string>A258B4F0-FA25-4ABC-8320-A8DCDAFBC727</string>
 		<string>48A0743E-FF2F-4D8E-BA0B-66756D9B0FF2</string>
 		<string>00F403DB-1105-4591-ABB2-23B6A0243477</string>
+		<string>20030B1A-935E-491D-8BD5-B2D1851863D7</string>
 		<string>2C45FF04-AE76-4ACE-B570-8063D6E616CF</string>
 		<string>41CA4A52-A1BB-48B4-9C22-42552802E71C</string>
 		<string>E2F3DD3C-1FB7-47B1-AA2F-3DFEE9075B31</string>
@@ -62,6 +64,54 @@
 			</dict>
 			<key>ItemName</key>
 			<string>crf_to_labels.php</string>
+			<key>ItemType</key>
+			<string>FileReference</string>
+			<key>UserOverrideItemName</key>
+			<true/>
+		</dict>
+		<key>20030B1A-935E-491D-8BD5-B2D1851863D7</key>
+		<dict>
+			<key>ItemData</key>
+			<dict>
+				<key>BookmarkData</key>
+				<data>
+				Ym9va+gCAAAAAAQQMAAAADaQUBbj5+SODDV5e4veZjr7
+				GS9F+exvi2nLyqHFdrPM5AEAAAQAAAADAwAAAAgAKAUA
+				AAABAQAAVXNlcnMAAAAFAAAAAQEAAHJwYWdlAAAACwAA
+				AAEBAABEZXZlbG9wbWVudAAOAAAAAQEAAGRvYy1sYXlv
+				dXQtY3JmAAAIAAAAAQEAAGhvY3IucGhwFAAAAAEGAAAQ
+				AAAAIAAAADAAAABEAAAAXAAAAAgAAAAEAwAAhFwAAAAA
+				AAAIAAAABAMAAJbGAwAAAAAACAAAAAQDAABZKSUAAAAA
+				AAgAAAAEAwAAouxOBgAAAAAIAAAABAMAACvQVQYAAAAA
+				FAAAAAEGAACIAAAAmAAAAKgAAAC4AAAAyAAAAAgAAAAA
+				BAAAQcQh4GOAAAAYAAAAAQIAAAEAAAAAAAAADwAAAAAA
+				AAAAAAAAAAAAAAgAAAAEAwAAAwAAAAAAAAAEAAAAAwMA
+				APUBAAAIAAAAAQkAAGZpbGU6Ly8vDAAAAAEBAABNYWNp
+				bnRvc2ggSEQIAAAABAMAAACQgpbnAAAACAAAAAAEAABB
+				xQd6oAAAACQAAAABAQAARUVEQkM0OTUtREY1Mi00NTZB
+				LUI0MzEtRkI2MDdCRjA0QUQxGAAAAAECAACBAAAAAQAA
+				AO8TAAABAAAAAAAAAAAAAAABAAAAAQEAAC8AAAAAAAAA
+				AQUAAMwAAAD+////AQAAAAAAAAAQAAAABBAAAGwAAAAA
+				AAAABRAAANgAAAAAAAAAEBAAAAQBAAAAAAAAQBAAAPQA
+				AAAAAAAAAiAAANABAAAAAAAABSAAAEABAAAAAAAAECAA
+				AFABAAAAAAAAESAAAIQBAAAAAAAAEiAAAGQBAAAAAAAA
+				EyAAAHQBAAAAAAAAICAAALABAAAAAAAAMCAAANwBAAAA
+				AAAAAcAAACQBAAAAAAAAEcAAACAAAAAAAAAAEsAAADQB
+				AAAAAAAAENAAAAQAAAAAAAAA
+				</data>
+				<key>FileURL</key>
+				<string>file:///Users/rpage/Development/doc-layout-crf/hocr.php</string>
+				<key>HasSecurityScope</key>
+				<true/>
+				<key>RelativePath</key>
+				<string>./hocr.php</string>
+				<key>TypeID</key>
+				<string>_CFileLocator</string>
+				<key>Version</key>
+				<integer>1</integer>
+			</dict>
+			<key>ItemName</key>
+			<string>hocr.php</string>
 			<key>ItemType</key>
 			<string>FileReference</string>
 			<key>UserOverrideItemName</key>
@@ -400,6 +450,56 @@
 			</dict>
 			<key>ItemName</key>
 			<string>train.php</string>
+			<key>ItemType</key>
+			<string>FileReference</string>
+			<key>UserOverrideItemName</key>
+			<true/>
+		</dict>
+		<key>A258B4F0-FA25-4ABC-8320-A8DCDAFBC727</key>
+		<dict>
+			<key>ItemData</key>
+			<dict>
+				<key>BookmarkData</key>
+				<data>
+				Ym9vaygDAAAAAAQQMAAAAKjombHknPuYxtbNjE02aXAW
+				ZuM8WYS90D3kDesteVW+GAIAAAQAAAADAwAAAAgAKAUA
+				AAABAQAAVXNlcnMAAAAFAAAAAQEAAHJwYWdlAAAACwAA
+				AAEBAABEZXZlbG9wbWVudAAOAAAAAQEAAGRvYy1sYXlv
+				dXQtY3JmAAAJAAAAAQEAAGFiYnl5LnBocAAAABQAAAAB
+				BgAAEAAAACAAAAAwAAAARAAAAFwAAAAIAAAABAMAAIRc
+				AAAAAAAACAAAAAQDAACWxgMAAAAAAAgAAAAEAwAAWSkl
+				AAAAAAAIAAAABAMAAKLsTgYAAAAACAAAAAQDAAD19lQG
+				AAAAABQAAAABBgAAjAAAAJwAAACsAAAAvAAAAMwAAAAI
+				AAAAAAQAAEHDYezcgAAAGAAAAAECAAABAAAAAAAAAA8A
+				AAAAAAAAAAAAAAAAAAAIAAAABAMAAAMAAAAAAAAABAAA
+				AAMDAAD1AQAACAAAAAEJAABmaWxlOi8vLwwAAAABAQAA
+				TWFjaW50b3NoIEhECAAAAAQDAAAAkIKW5wAAAAgAAAAA
+				BAAAQcUHeqAAAAAkAAAAAQEAAEVFREJDNDk1LURGNTIt
+				NDU2QS1CNDMxLUZCNjA3QkYwNEFEMRgAAAABAgAAgQAA
+				AAEAAADvEwAAAQAAAAAAAAAAAAAAAQAAAAEBAAAvAAAA
+				AAAAAAEFAAAaAAAAAQEAAE5TVVJMRG9jdW1lbnRJZGVu
+				dGlmaWVyS2V5AAAEAAAAAwMAANPXBQDYAAAA/v///wEA
+				AAAAAAAAEQAAAAQQAABwAAAAAAAAAAUQAADcAAAAAAAA
+				ABAQAAAIAQAAAAAAAEAQAAD4AAAAAAAAAAIgAADUAQAA
+				AAAAAAUgAABEAQAAAAAAABAgAABUAQAAAAAAABEgAACI
+				AQAAAAAAABIgAABoAQAAAAAAABMgAAB4AQAAAAAAACAg
+				AAC0AQAAAAAAADAgAADgAQAAAAAAAAHAAAAoAQAAAAAA
+				ABHAAAAgAAAAAAAAABLAAAA4AQAAAAAAABDQAAAEAAAA
+				AAAAAOgBAIAMAgAAAAAAAA==
+				</data>
+				<key>FileURL</key>
+				<string>file:///Users/rpage/Development/doc-layout-crf/abbyy.php</string>
+				<key>HasSecurityScope</key>
+				<true/>
+				<key>RelativePath</key>
+				<string>./abbyy.php</string>
+				<key>TypeID</key>
+				<string>_CFileLocator</string>
+				<key>Version</key>
+				<integer>1</integer>
+			</dict>
+			<key>ItemName</key>
+			<string>abbyy.php</string>
 			<key>ItemType</key>
 			<string>FileReference</string>
 			<key>UserOverrideItemName</key>

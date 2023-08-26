@@ -37,6 +37,10 @@ $dirs = array
 
 // Shilap
 '71-82', // has issues with text overlapping figures (figure labelling)
+
+// BZN (BioStor)
+'biostor-80763_abbyy',
+
 );
 
 // make sure we start with a fesh template

@@ -212,6 +212,11 @@ $feature_templates['latlon'] =
 UCOUNT:%x[0,FID]
 UCOUNT:%x[1,FID]';
 
+$feature_templates['date'] =
+'UCOUNT:%x[-1,FID]
+UCOUNT:%x[0,FID]
+UCOUNT:%x[1,FID]';
+
 $feature_templates['acronym'] =
 'UCOUNT:%x[-1,FID]
 UCOUNT:%x[0,FID]
@@ -642,8 +647,50 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 	
 	$doc->feature_row_to_page = array();
 	$doc->feature_row_to_words = array();
+	
+	// Get basic style for each block based on position w.r.t. bounding rectangle
+	// to do: handle multiple columns	
+	$slop = $doc->modal_font_size; // allow for some margin of error	
+	
+	
+	$doc_columns = 1; // defauult
+	
+	$number_two_columns = 0;
+	
+	//  does document have two columns?
+	foreach ($doc->pages as $page)
+	{
+		$bounding_rect = page_bounding_rect($page);
+		$block_rects   = page_block_rects($page);
+		$vertical = vertical_fold($bounding_rect, $slop);
+		
+		$total_area = 0;
+		$column_area = 0;
+		foreach ($block_rects as $block_id => $r)
+		{		
+			$total_area += $r->getArea();
+			
+			if (!$r->intersectsRect($vertical))
+			{
+				$column_area += $r->getArea();
+			}
+		}
+		
+		if ($column_area / $total_area > 0.5)
+		{
+			$number_two_columns++;
+		}
+
+	}	
+	
+	if ($number_two_columns / count($doc->pages) > 0.5)
+	{
+		$doc_columns = 2;
+	}
 
 	$page_counter = 0;
+	
+	$region_rects = array();
 	
 	foreach ($doc->pages as $page)
 	{
@@ -653,37 +700,76 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 		$block_rects   = page_block_rects($page);
 		
 		$page_top_rect = new Rectangle($bounding_rect->x, $bounding_rect->y, $bounding_rect->w, $doc->modal_font_size);							
-		$page_bottom_rect = new Rectangle($bounding_rect->x, $bounding_rect->y + $bounding_rect->h - $doc->modal_font_size, $bounding_rect->w, $doc->modal_font_size);
+		$page_bottom_rect = new Rectangle($bounding_rect->x, $bounding_rect->y + $bounding_rect->h - $doc->modal_font_size, $bounding_rect->w, $doc->modal_font_size);		
+
+
+		// for single column docments all blocks have same parent,
+		// but if two columns we have three parents (whole page, and left and right columns)		
+		$block_parent = array();
 		
-		// Get basic style for each block based on position w.r.t. bounding rectangle
-		// to do: handle multiple columns	
-		$slop = $doc->modal_font_size; // allow for some margin of error	
+		// default parent is 0 (the page)
+		foreach ($block_rects as $block_id => $r)
+		{		
+			$block_parent[$block_id] = 0;
+		}
+		$region_rects[0] = $bounding_rect;	
+		
+		// this is where we figure out if we have two colums
+		if ($doc_columns == 2)
+		{
+			$vertical = vertical_fold($bounding_rect, $slop);	
+
+			foreach ($block_rects as $block_id => $r)
+			{	
+				if ($r->intersectsRect($vertical))
+				{
+					$block_parent[$block_id] = 0;
+				}
+				else
+				{
+					if ($r->x + $r->w < $vertical->x)
+					{
+						$block_parent[$block_id] = 1;
+					}
+					else
+					{
+						$block_parent[$block_id] = 2;
+					}
+				}
+			}
+			
+			foreach ($block_rects as $block_id => $r)
+			{	
+				if (!isset($region_rects[$block_parent[$block_id]]))
+				{
+					$region_rects[$block_parent[$block_id]] = $r;
+				}
+				else
+				{
+					$region_rects[$block_parent[$block_id]]->merge($r);
+				}			
+			}
+		}		
 		
 		foreach ($block_rects as $block_id => $r)
 		{		
-			$grid = grid($bounding_rect, $r, $slop);
-			
-			if ($debug)
-			{
-				echo "\nGrid alignment\n";
-				print_r($grid);
-			}
-
 			// block-level features			
 			$block_features[$block_id] = array();
 			
 			// defaults
 			$block_features[$block_id]['repetitivePattern'] = 0;
 			
-			/*
-			$block_features[$block_id]['width'] = $grid['width'];
-			$positions = array('left', 'top', 'bottom', 'right', 'centered');
-			foreach ($positions as $pos)
-			{
-				$block_features[$block_id][$pos] = $grid[$pos];
-			}
-			*/
+			// get alignment of block w.r.t. to enclsoing rect 						
+			$br = $region_rects[$block_parent[$block_id]];
 			
+			$grid = grid($br, $r, $slop);
+			
+			if ($debug)
+			{
+				echo "\nGrid alignment\n";
+				print_r($grid);
+			}
+						
 			// block alignment
 			$justifyself = 'NORMAL';
 			
@@ -1263,6 +1349,20 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				{
 					$line_features[$line_id]['latlon'] = 'LATLON';
 				}
+				
+				/*
+				$line_features[$line_id]['date'] = 'no';
+
+				if (preg_match('/\d{1,2}[\.|-|-|\s]\s*[ivx]+[\.|-|-|\s]\s*[0-9]{4}/iu', $line_text))
+				{
+					$line_features[$line_id]['date'] = 'DATE';
+				}
+
+				if (preg_match('/\d+\s+[A-Z][a-z]{2}\.?[a-z]*\s+[0-9]{4}/u', $line_text))
+				{
+					$line_features[$line_id]['date'] = 'DATE';
+				}	
+				*/			
 				
 				// acronyms (e.g., museum codes)
 				$line_features[$line_id]['acronym'] = 0;

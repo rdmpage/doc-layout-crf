@@ -92,7 +92,7 @@ foreach ($files as $filename)
 					$width 	= $scale * ($block->bbox[2] - $block->bbox[0]);
 					$height = $scale * ($block->bbox[3] - $block->bbox[1]);
 
-					$html .=  '<div title="block_' . $block_id . '" style="background:#FFFFCC; border:1px solid rgb(228,228,228); position:absolute;left:' . $left . 'px;'
+					$html .=  '<div title="block_' . $block_id . '" style="background:rgba(255,255,0,0.2); border:1px solid rgb(228,228,228); position:absolute;left:' . $left . 'px;'
 						. 'top:' . $top . 'px;'
 						. 'width:' . $width . 'px;'
 						. 'height:' . $height . 'px;'						
