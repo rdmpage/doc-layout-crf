@@ -41,6 +41,16 @@ $dirs = array
 // BZN (BioStor)
 'biostor-80763_abbyy',
 
+// Entomotax...
+'2016001',
+'2016005',
+
+// Austrobaileya
+'ngugi-pomax-ammophila-austrobaileya-v12-107-116',
+
+// Phytologia
+'99_2_126-129ebinger_new_senegalia',
+
 );
 
 // make sure we start with a fesh template

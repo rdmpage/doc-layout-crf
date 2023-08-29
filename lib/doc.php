@@ -1534,7 +1534,6 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 			$crf_data .= join(' ', $features) . "\n";						
 		}	
 		
-		
 		$page_counter++;
 	}
 

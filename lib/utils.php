@@ -24,8 +24,8 @@ function base_sim($text0, $text1, $debug = false)
 	$text0 = preg_replace('/\d/', '@', $text0);
 	$text1 = preg_replace('/\d/', '@', $text1);
 	
-	$text0 = mb_substr($text0, 0, 200);
-	$text1 = mb_substr($text1, 0, 200);
+	$text0 = mb_substr($text0, 0, 64);
+	$text1 = mb_substr($text1, 0, 64);
 	
 	if ($debug)
 	{

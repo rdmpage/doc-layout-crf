@@ -18,14 +18,22 @@ function relationship($rect1, $rect2)
 		
 		$overlap = $rect1->getOverlap($rect2);
 		
-		if ($overlap->getArea() == $rect2->GetArea())
-		{
-			$relations[] = "inclusion";
-		}
+		if ($overlap)
+		{		
+			if ($overlap->getArea() == $rect2->GetArea())
+			{
+				$relations[] = "inclusion";
+			}
 		
-		if ($overlap->getArea() == $rect1->GetArea())
+			if ($overlap->getArea() == $rect1->GetArea())
+			{
+				$relations[] = "is included";
+			}
+		}
+		else
 		{
-			$relations[] = "is included";
+			// $overlap should by definition not be empty
+			echo "Badness\n";			
 		}
 		
 	}

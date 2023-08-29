@@ -2,30 +2,64 @@
 
 Use a CRF to label document layout. Inspired by Grobid, input and output data formats based on VILA (a LLM approach).
 
+## Issues
+
+### Fonts
+
+Some files, e.g. 32_2_113_118_Golovatch_Korotaeva_for_Inet.pdf have custom fonts for male/female symbols. These font can be seen using Adobe Acrobat, and extracted using:
+
+```
+mutool extract 32_2_113_118_Golovatch_Korotaeva_for_Inet.pdf
+```
+
+I need to understand how to add fonts to whatever PDF tool I use.
+
+
+### Superscript/subscript
+
+Some files have super- or subscripts, and pdftoxml extracts these as separate blocks, which breaks the line of text and hence affects our ability to understand the text. Can we fix this?
+
+### Other pdf xml tools
+
+```
+pdftohtml -xml 32_2_113_118_Golovatch_Korotaeva_for_Inet.pdf x.xml
+```
+
+### PDF types and vendors
+
+#### ResearchGate
+
+ResearchGate PDFs seem to have a `rgid` field inserted into the `details` object for a PDF. 
+
 ## Training data
 
 Need a CSV with information on each file used for training, particularly source URL and license.
 
 Possible files
 
-ID | DOI | URL | License | PDF
---|--|--|--
-zt01991p027 | 10.11646/zootaxa.1991.1.1 | | “free” | https://www.mapress.com/zootaxa/2009/f/zt01991p027.pdf
-zt03796p593 | 10.11646/zootaxa.3796.3.10 | | “free” | https://www.mapress.com/zootaxa/2014/f/zt03796p593.pdf
-PK-184-067_article-71045_en_1 | 10.3897/phytokeys.184.71045 | |CC-BY | https://phytokeys.pensoft.net/article/71045/download/pdf/
-Cassidafromborneo | | | “free” | http://www.cassidae.uni.wroc.pl/Cassidafromborneo.pdf
-Minkina_Kral_2022_Rhyparus_ASZB | | | “free” | https://www.zoospol.cz/wp-content/uploads/2022/12/Minkina_Kral_2022_Rhyparus_ASZB.pdf
-129ebinger_new_senegalia | | | “open access” | https://www.phytologia.org/uploads/2/3/4/2/23422706/99_2_126-129ebinger_new_senegalia.pdf
-proccas_v58_n08 | | | “free” | https://researcharchive.calacademy.org/research/scipubs/pdfs/v58/proccas_v58_n08.pdf
-Kral_et_al_Enoplotrupes-Enoplotrupes-apatani-sp.-nov | | | “free” | https://www.zoospol.cz/wp-content/uploads/2021/05/
-s6 | 10.5343/bms.2017.1119 | | “Free content” | https://www.ingentaconnect.com/search/download?pub=infobike://umrsmas/bullmar/2018/00000094/00000001/art00006&mimetype=application/pdf
-S26 | | https://www.ingentaconnect.com/contentone/umrsmas/bullmar/2002/00000071/00000002/art00026 | “Free content” | https://www.ingentaconnect.com/search/download?pub=infobike://umrsmas/bullmar/2002/00000071/00000002/art00026&mimetype=application/pdf 
-| | 10.11646/zootaxa.5336.2.2 | https://www.mapress.com/zt/article/view/zootaxa.5336.2.2/51703 | CC-BY-NC | 
-7459 | 10.17109/AZH.68.1.23.2022 | https://ojs.mtak.hu/index.php/actazool/article/view/7459| CC-BY-NC | https://ojs.mtak.hu/index.php/actazool/article/view/7459/6676
-ActaZH_2017_Vol_63_4_429 | 10.17109/AZH.63.4.429.2017 | https://ojs.mtak.hu/index.php/actazool/article/view/948 | CC-BY-NC | http://actazool.nhmus.hu/63/4/ActaZH_2017_Vol_63_4_429.pdf
-ActaZH_2017_Vol_63_1_71 | 10.17109/AZH.63.1.71.2017 | https://ojs.mtak.hu/index.php/actazool/article/view/1274 | CC-BY-NC | http://actazool.nhmus.hu/63/1/ActaZH_2017_Vol_63_1_71.pdf 
-ActaZH_2017_Vol_63_4_377| 10.17109/AZH.63.4.377.2017 | https://ojs.mtak.hu/index.php/actazool/article/view/1170 | CC-BY-NC| http://actazool.nhmus.hu/63/4/ActaZH_2017_Vol_63_4_377.pdf
-ZM1989063006 | | https://repository.naturalis.nl/pub/318136 | CC-BY | https://repository.naturalis.nl/pub/318136/ZM1989063006.pdf
+Journal | ID | DOI | URL | License | PDF
+--|--|--|--|--
+Zootaxa | zt01991p027 | 10.11646/zootaxa.1991.1.1 | | “free” | https://www.mapress.com/zootaxa/2009/f/zt01991p027.pdf
+ Zootaxa| zt03796p593 | 10.11646/zootaxa.3796.3.10 | | “free” | https://www.mapress.com/zootaxa/2014/f/zt03796p593.pdf
+Phytokeys | PK-184-067_article-71045_en_1 | 10.3897/phytokeys.184.71045 | |CC-BY | https://phytokeys.pensoft.net/article/71045/download/pdf/
+Genus | Cassidafromborneo | | | “free” | http://www.cassidae.uni.wroc.pl/Cassidafromborneo.pdf
+Acta Soc. Zool. Bohem. | Minkina_Kral_2022_Rhyparus_ASZB | | | “free” | https://www.zoospol.cz/wp-content/uploads/2022/12/Minkina_Kral_2022_Rhyparus_ASZB.pdf
+Phytologia | 99_2_126-129ebinger_new_senegalia | | | “open access” | https://www.phytologia.org/uploads/2/3/4/2/23422706/99_2_126-129ebinger_new_senegalia.pdf
+Proceedings of the California Academy of Sciences | proccas_v58_n08 | | | “free” | https://researcharchive.calacademy.org/research/scipubs/pdfs/v58/proccas_v58_n08.pdf
+Acta Soc. Zool. Bohem. | Kral_et_al_Enoplotrupes-Enoplotrupes-apatani-sp.-nov | | | “free” | https://www.zoospol.cz/wp-content/uploads/2021/05/
+Bulletin of Marine Science | s6 | 10.5343/bms.2017.1119 | | “Free content” | https://www.ingentaconnect.com/search/download?pub=infobike://umrsmas/bullmar/2018/00000094/00000001/art00006&mimetype=application/pdf
+Bulletin of Marine Science  | S26 | | https://www.ingentaconnect.com/contentone/umrsmas/bullmar/2002/00000071/00000002/art00026 | “Free content” | https://www.ingentaconnect.com/search/download?pub=infobike://umrsmas/bullmar/2002/00000071/00000002/art00026&mimetype=application/pdf 
+Zootaxa | | 10.11646/zootaxa.5336.2.2 | https://www.mapress.com/zt/article/view/zootaxa.5336.2.2/51703 | CC-BY-NC | 
+Acta Zoologica Academiae Scientiarum Hungaricae  | 7459 | 10.17109/AZH.68.1.23.2022 | https://ojs.mtak.hu/index.php/actazool/article/view/7459| CC-BY-NC | https://ojs.mtak.hu/index.php/actazool/article/view/7459/6676
+Acta Zoologica Academiae Scientiarum Hungaricae  | ActaZH_2017_Vol_63_4_429 | 10.17109/AZH.63.4.429.2017 | https://ojs.mtak.hu/index.php/actazool/article/view/948 | CC-BY-NC | http://actazool.nhmus.hu/63/4/ActaZH_2017_Vol_63_4_429.pdf
+Acta Zoologica Academiae Scientiarum Hungaricae  | ActaZH_2017_Vol_63_1_71 | 10.17109/AZH.63.1.71.2017 | https://ojs.mtak.hu/index.php/actazool/article/view/1274 | CC-BY-NC | http://actazool.nhmus.hu/63/1/ActaZH_2017_Vol_63_1_71.pdf 
+Acta Zoologica Academiae Scientiarum Hungaricae  | ActaZH_2017_Vol_63_4_377| 10.17109/AZH.63.4.377.2017 | https://ojs.mtak.hu/index.php/actazool/article/view/1170 | CC-BY-NC| http://actazool.nhmus.hu/63/4/ActaZH_2017_Vol_63_4_377.pdf
+ZOOLOGISCHE MEDEDELEMGEN | ZM1989063006 | | https://repository.naturalis.nl/pub/318136 | CC-BY | https://repository.naturalis.nl/pub/318136/ZM1989063006.pdf
+The Taxonomic Report | ttr-8-2 | | https://digitalcommons.unl.edu/taxrpt/27/|CC-BY-SA-NC | https://lepsurvey.carolinanature.com/ttr/ttr-8-2.pdf
+Entomotaxonomia | 2016001 |10.11680/entomotax.2016001 |http://xbkcflxb.cnjournals.com/xbkcflxben/ch/reader/view_abstract.aspx?file_no=2016001&flag=1 | | http://xbkcflxb.cnjournals.com/xbkcflxben/ch/reader/create_pdf.aspx?file_no=2016001&year_id=2016&quarter_id=1&falg=1
+Entomotaxonomia | 2016005 | 10.11680/entomotax.2016005 | | | 
+Austrobaileya | ngugi-pomax-ammophila-austrobaileya-v12-107-116 | | https://www.qld.gov.au/environment/plants-animals/plants/herbarium/austrobaileya | “free” | https://www.qld.gov.au/__data/assets/pdf_file/0022/332419/ngugi-pomax-ammophila-austrobaileya-v12-107-116.pdf
+Folia Parasitologica | fp.2015.025 | 10.14411/fp.2015.025 | https://folia.paru.cas.cz/artkey/fol-201501-0025_an_additional_genus_and_two_additional_species_of_forticulcitinae_digenea_haploporidae.php | CC-BY | https://folia.paru.cas.cz/pdfs/fol/2015/01/25.pdf
 
 ## PDFs
 
