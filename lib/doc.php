@@ -1338,17 +1338,18 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 					$line_features[$line_id]['latlon'] = 'LATLON';
 				}
 
-				// 57o29.00'W
+				// 57o29.00'W				
 				if (preg_match('/\d+o\d+(\.\d+)?\'[N|S|W|E]/u', $line_text))
 				{
 					$line_features[$line_id]['latlon'] = 'LATLON';
 				}
 
 				// 9∞ 11.1'S
-				if (preg_match('/\d+∞\s*\d+(\.\d+)?\'[N|S|W|E]/u', $line_text))
+				// 139°13.8'E
+				if (preg_match('/\d+[°|∞]\s*\d+(\.\d+)?\'[N|S|W|E]/u', $line_text))
 				{
 					$line_features[$line_id]['latlon'] = 'LATLON';
-				}
+				}				
 				
 				/*
 				$line_features[$line_id]['date'] = 'no';
