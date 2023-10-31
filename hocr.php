@@ -216,36 +216,131 @@ foreach ($pages_tokens as $page_number => $page)
 
 // extract images
 
-$jp2_prefix = str_replace('_hocr', '_jp2', $basedir);
-$archive = str_replace('_hocr', '', $basedir);
+$images_done = false;
 
-$n = count($pages_tokens);
-for ($i = 0; $i < $n; $i++)
+if (!$images_done)
 {
-	foreach ($pages_tokens[$i]->blocks as $block)
+	// jbig2 of IA jp2 images
+	$png_prefix = str_replace('_hocr', '_png', $basedir);
+
+	if (file_exists($png_prefix))
 	{
-		if ($block->type == 'image')
+		$images_done = true;
+
+		$n = count($pages_tokens);
+		for ($i = 0; $i < $n; $i++)
 		{
-			$fragment = 
-				($block->bbox[2] - $block->bbox[0]) 
-				. 'x' 
-				. ($block->bbox[3] - $block->bbox[1]) 				
-				. '+'
-				. $block->bbox[0]
-				. '+'
-				. $block->bbox[1];
+			foreach ($pages_tokens[$i]->blocks as $block)
+			{
+				if ($block->type == 'image')
+				{
+					$fragment = 
+						($block->bbox[2] - $block->bbox[0]) 
+						. 'x' 
+						. ($block->bbox[3] - $block->bbox[1]) 				
+						. '+'
+						. $block->bbox[0]
+						. '+'
+						. $block->bbox[1];
 			
-			$jp2_filename = $jp2_prefix . '/' . $archive . '_' . str_pad($i, 4, '0', STR_PAD_LEFT) . '.jp2';
+					$png_filename = $png_prefix . '/page-' . str_pad($i, 4, '0', STR_PAD_LEFT) . '.png';
 
-			$image_filename  = $basedir . '/' . $block->href;
+					$image_filename  = $basedir . '/' . $block->href;
 
-			$command = 'convert -extract ' . $fragment . ' ' . $jp2_filename . ' ' . $image_filename;
-			echo $command . "\n";
+					$command = 'convert -extract ' . $fragment . ' ' . $png_filename . ' ' . $image_filename;
+					echo $command . "\n";
 			
-			system($command);		
+					system($command);		
 		
+				}
+			}
 		}
 	}
 }
+
+
+if (!$images_done)
+{
+	// Internet Archive
+	$jp2_prefix = str_replace('_hocr', '_jp2', $basedir);
+	$archive = str_replace('_hocr', '', $basedir);
+
+	if (file_exists($jp2_prefix))
+	{
+		$images_done = true;
+
+		$n = count($pages_tokens);
+		for ($i = 0; $i < $n; $i++)
+		{
+			foreach ($pages_tokens[$i]->blocks as $block)
+			{
+				if ($block->type == 'image')
+				{
+					$fragment = 
+						($block->bbox[2] - $block->bbox[0]) 
+						. 'x' 
+						. ($block->bbox[3] - $block->bbox[1]) 				
+						. '+'
+						. $block->bbox[0]
+						. '+'
+						. $block->bbox[1];
+			
+					$jp2_filename = $jp2_prefix . '/' . $archive . '_' . str_pad($i, 4, '0', STR_PAD_LEFT) . '.jp2';
+
+					$image_filename  = $basedir . '/' . $block->href;
+
+					$command = 'convert -extract ' . $fragment . ' ' . $jp2_filename . ' ' . $image_filename;
+					echo $command . "\n";
+			
+					system($command);		
+		
+				}
+			}
+		}
+	}
+}
+
+if (!$images_done)
+{
+	// OCR from PDF
+	$tiff_prefix = str_replace('_hocr', '_tiff', $basedir);
+
+	if (file_exists($tiff_prefix))
+	{
+		$images_done = true;
+	
+		$n = count($pages_tokens);
+		for ($i = 0; $i < $n; $i++)
+		{
+			foreach ($pages_tokens[$i]->blocks as $block)
+			{
+				if ($block->type == 'image')
+				{
+					$fragment = 
+						($block->bbox[2] - $block->bbox[0]) 
+						. 'x' 
+						. ($block->bbox[3] - $block->bbox[1]) 				
+						. '+'
+						. $block->bbox[0]
+						. '+'
+						. $block->bbox[1];
+			
+					$tiff_filename = $tiff_prefix . '/page-' . str_pad($i, 3, '0', STR_PAD_LEFT) . '.tiff';
+
+					$image_filename  = $basedir . '/' . $block->href;
+
+					$command = 'convert -extract ' . $fragment . ' ' . $tiff_filename . ' ' . $image_filename;
+					echo $command . "\n";
+			
+					system($command);		
+		
+				}
+			}
+		}
+	}
+}
+
+
+
 
 ?>

@@ -1,13 +1,13 @@
 <?php
 
-// Parse VILA-style format and output HTML to view, coloured by labels
+// Parse VILA-style format and output HTML, coloured by labels, so we can view results
 
 error_reporting(E_ALL);
 
 $basedir = '';
 if ($argc < 2)
 {
-	echo "Usage: predict.php <basedir>\n";
+	echo "Usage: colour.php <basedir>\n";
 	exit(1);
 }
 else
@@ -91,16 +91,27 @@ foreach ($files as $filename)
 					$top 	= $scale * $block->bbox[1];
 					$width 	= $scale * ($block->bbox[2] - $block->bbox[0]);
 					$height = $scale * ($block->bbox[3] - $block->bbox[1]);
-
-					$html .=  '<div title="block_' . $block_id . '" style="background:rgba(255,255,0,0.2); border:1px solid rgb(228,228,228); position:absolute;left:' . $left . 'px;'
-						. 'top:' . $top . 'px;'
-						. 'width:' . $width . 'px;'
-						. 'height:' . $height . 'px;'						
-						. '">';
 					
-					if ($block->type == 'image' && isset($block->href))
+					if ($block->type == 'image')
 					{
-						$html .= '<img src="' . $block->href . '" width="' . $width . '">';
+						$html .=  '<div title="block_' . $block_id . '" style="background:rgba(255,0,0,0.2); border:1px solid rgb(228,228,228); position:absolute;left:' . $left . 'px;'
+							. 'top:' . $top . 'px;'
+							. 'width:' . $width . 'px;'
+							. 'height:' . $height . 'px;'						
+							. '">';
+
+						if (isset($block->href))
+						{
+							$html .= '<img src="' . $block->href . '" width="' . $width . '">';
+						}
+					}
+					else
+					{
+						$html .=  '<div title="block_' . $block_id . '" style="background:rgba(255,255,0,0.2); border:1px solid rgb(228,228,228); position:absolute;left:' . $left . 'px;'
+							. 'top:' . $top . 'px;'
+							. 'width:' . $width . 'px;'
+							. 'height:' . $height . 'px;'						
+							. '">';
 					}
 					
 					$html .= '</div>';			

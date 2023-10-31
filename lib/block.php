@@ -33,7 +33,21 @@ function relationship($rect1, $rect2)
 		else
 		{
 			// $overlap should by definition not be empty
-			echo "Badness\n";			
+			// if we get here, then the two rects are touching but not overlapping
+			$relations[] = 'adjacent';
+			
+			if (0)
+			{
+				echo basename(__FILE__) . " line " . __LINE__  . ": Badness\n";	
+			
+				echo "rect1 = [" . join(",", $rect1->toArray()) . "]\n";
+				echo "rect2 = [" . join(",", $rect2->toArray()) . "]\n";
+			
+				echo '<html><svg width="1000" height="1000">';
+				echo $rect1->toSvg() . "\n";
+				echo $rect2->toSvg() . "\n";
+				echo '</html>';
+			}
 		}
 		
 	}

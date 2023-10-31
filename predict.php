@@ -1,6 +1,6 @@
 <?php
 
-// Gneertae training data (i.e., labelled)
+// Run CRF model and add output label files.
 
 error_reporting(E_ALL);
 
@@ -40,7 +40,7 @@ file_put_contents($data_filename, $crf_data);
 
 $output_filename = $basedir . '.out';	
 
-$command = 'crf_test -m rod.model ' . $data_filename . ' > ' . $output_filename;
+$command = "crf_test -m rod.model '" . $data_filename . "' > '" . $output_filename . "'";
 
 system($command);
 

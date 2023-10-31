@@ -51,6 +51,21 @@ $dirs = array
 // Phytologia
 '99_2_126-129ebinger_new_senegalia',
 
+// Proceedings of the Biological Society of Washington
+'biostor-85690_abbyy',
+
+// Kew Bulletin
+'s12225-015-9569-6',
+
+// Comptes Rendus Biologies
+//'1-s2.0-S1631069110002283-main', // need to fix bock errors
+
+// Baltic J. Coleopterol. 
+'16',
+
+// Contributions to Entomology
+'BE_2021_2_227-231',
+
 );
 
 // make sure we start with a fesh template

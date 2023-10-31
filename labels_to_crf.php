@@ -1,6 +1,6 @@
 <?php
 
-// Create features and add existingm labels
+// Create features and add existing labels
 
 error_reporting(E_ALL);
 

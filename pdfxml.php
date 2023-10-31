@@ -1,8 +1,7 @@
 <?php
 
 // Convert PDFTOXML XML to VILA
-
-// add block details and images to basic training data
+// Add block details and images to basic training data
 
 //----------------------------------------------------------------------------------------
 function parse_xml($filename)

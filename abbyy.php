@@ -44,8 +44,7 @@ function parse_abbyy($filename)
 		
 		$word_counter = 0;
 		$line_counter = 0;
-		$block_counter = 0;
-		
+		$block_counter = 0;	
 
 		// coordinates
 		if ($xml_page->hasAttributes()) 
@@ -128,20 +127,14 @@ function parse_abbyy($filename)
 				$block->href = 'image-' . $image_counter . '.jpeg';
 				$image_counter++;
 				
-				$page->blocks[$block_counter] = $block;
-				$block_counter++;
-				
-								
 				// There are some odd things that happen in ABBYY that we need to deal with
 		
 				// There may be an image almost the size of the page, this is the scan of the 
 				// whole page and we don't want that.
 				
 				//to do
-			
-				/*
-				$width = $block->bbox->maxx - $image_obj->bbox->minx;
-				$height = $image_obj->bbox->maxy - $image_obj->bbox->miny;
+				$width = $block->bbox[2] - $block->bbox[0];
+				$height = $block->bbox[3] - $block->bbox[1];
 			
 				//echo '[' . $width . ',' . $height . ']' . "\n";
 				//echo '[' . $page->width . ',' . $page->height . ']' . "\n";
@@ -150,17 +143,11 @@ function parse_abbyy($filename)
 			
 				//echo $ratio . "\n";
 			
-				if ($ratio > 0.9)
+				if ($ratio < 0.9)
 				{
-					$add_block = false;		
-				}
-		
-				if ($add_block)
-				{
-					$image_counter++;
-					$page->images[] = $image_obj;
-				}	
-				*/				
+					$page->blocks[$block_counter] = $block;
+					$block_counter++;
+				}								
 			}
 
 			if ($block_type == 'text')
@@ -274,7 +261,7 @@ function parse_abbyy($filename)
 									if (count($word) > 0)
 									{
 										// emit
-										echo join('', $word) . "\n";
+										//echo join('', $word) . "\n";
 										
 										$text = join('', $word);
 										
@@ -303,7 +290,7 @@ function parse_abbyy($filename)
 							if (count($word) > 0)
 							{
 								// emit
-								echo join('', $word) . "\n";
+								//echo join('', $word) . "\n";
 								
 								$text = join('', $word);
 								

@@ -12,21 +12,36 @@ $filename = 'ttr-8-2.pdf';
 $filename = 'researchgate/PulawskietalPCASser4v62withIDXrevisedversionupdatedIDXattachedLRVS.pdf';
 //$filename = 'scans figs not extracted/McGuire-AME102.pdf';
 
+$filename = 'needs training/ent31_2_154_158_Miroshnikov_for_Inet.pdf';
+
+$filename = 'BE_2021_2_227-231.pdf';
+//$filename = '121.pdf';
+
+// Russian
+$filename = 'ent31_2_154_158_Miroshnikov_for_Inet.pdf';
+
+// BioOne
+$filename = '0022-1511_2006_40_486_NFSOTG_2.0.CO_2.pdf';
+
+
 $pdf = $parser->parseFile($filename);
 
-$topics = array('text', 'metadata', 'fonts', 'coords');
-$topics = array( 'details');
-$topics = array( 'metadata');
+$topics = array('text', 'metadata', 'fonts', 'coords', 'numbering');
+//$topics = array( 'details');
+//$topics = array( 'metadata');
 $topics = array( 'media');
 //$topics = array( 'fonts');
 //$topics = array( 'trailer');
+//$topics = array( 'details');
+
+//$topics = array( 'numbering');
 
 
 //----------------------------------------------------------------------------------------
 // text
 if (in_array('text', $topics))
 {
-	echo "\Text\n";
+	echo "\nText\n";
 	echo   "--------\n";
 	$text = $pdf->getText();
 	echo $text;
@@ -52,8 +67,10 @@ if (in_array('fonts', $topics))
 
 	foreach ($fonts as $id => $font)
 	{
-		//print_r($font->getDetails());
-		echo $font->getDetails()['Name'] . "\n";	
+		
+		echo $font->getDetails()['Name'] . "\n";
+		echo "-----\n"	;
+		print_r($font->getDetails());
 	}
 }
 
@@ -84,14 +101,17 @@ if (in_array('media', $topics))
 		echo "MediaBox\n";
 		print_r($mediaBox);
 		
-		$xobjects = $page->getXObjects();
-		foreach( $xobjects  as $object ) 
+		if (1)
 		{
-			if ($object && method_exists($object, 'getDetails'))
+			$xobjects = $page->getXObjects();
+			foreach( $xobjects  as $object ) 
 			{
-				print_r($object->getDetails());
-			}
-		}	
+				if ($object && method_exists($object, 'getDetails'))
+				{
+					print_r($object->getDetails());
+				}
+			}	
+		}
 	}
 }
 
@@ -171,7 +191,10 @@ if (in_array('trailer', $topics))
 //----------------------------------------------------------------------------------------
 if (in_array('coords', $topics))
 {
-	$data = $pdf->getPages()[0]->getDataTm();
+	echo "\nCoordinates\n";
+	echo   "--------\n";
+
+	$data = $pdf->getPages()[3]->getDataTm();
 	print_r($data);
 }
 

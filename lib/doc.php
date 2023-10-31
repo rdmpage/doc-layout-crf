@@ -21,7 +21,47 @@ $dict = load_dictionary($dict_filename);
 //----------------------------------------------------------------------------------------
 // features
 
+// global flags for features
+
+$use_dictionary = false;
+$use_grid = true;
+
 $feature_templates = array();
+
+//----------------------------------------------------------------------------------------
+// grid (experimental)
+
+// two lines above and below
+$feature_templates['x'] =
+'UCOUNT:%x[-2,FID]
+UCOUNT:%x[-1,FID]
+UCOUNT:%x[0,FID]
+UCOUNT:%x[1,FID]
+UCOUNT:%x[2,FID]';
+
+$feature_templates['y'] =
+'UCOUNT:%x[-2,FID]
+UCOUNT:%x[-1,FID]
+UCOUNT:%x[0,FID]
+UCOUNT:%x[1,FID]
+UCOUNT:%x[2,FID]';
+
+$feature_templates['w'] =
+'UCOUNT:%x[-2,FID]
+UCOUNT:%x[-1,FID]
+UCOUNT:%x[0,FID]
+UCOUNT:%x[1,FID]
+UCOUNT:%x[2,FID]';
+
+$feature_templates['h'] =
+'UCOUNT:%x[-2,FID]
+UCOUNT:%x[-1,FID]
+UCOUNT:%x[0,FID]
+UCOUNT:%x[1,FID]
+UCOUNT:%x[2,FID]';
+
+
+//----------------------------------------------------------------------------------------
 
 $feature_templates['repetitivePattern'] = 	
 'UCOUNT:%x[-2,FID]
@@ -222,6 +262,8 @@ $feature_templates['acronym'] =
 UCOUNT:%x[0,FID]
 UCOUNT:%x[1,FID]';
 
+//----------------------------------------------------------------------------------------
+// empty because this is where either training label goes, or where we output prediction
 $feature_templates['label'] = "";
 
 //----------------------------------------------------------------------------------------
@@ -386,10 +428,12 @@ function doc_load($basedir)
 				$page->labels = json_decode($labels_json);
 			}
 			
-			$doc->pages[] = $page;
+			$pagenum = preg_replace('/^0+/', '', $pagenum);
+			
+			$doc->pages[$pagenum] = $page;
 
 		}	
-	}		
+	}
 	
 	return $doc;
 }
@@ -463,14 +507,12 @@ function doc_decorations(&$doc, $debug = false)
 {
 	// array of pages, each listing the block_ids of those blocks we think are decorations
 	$doc->decoration_blocks = array();
-
-	$page_counter = 0;
 	
 	$decorations = array('header', 'footer');	
 	$header_candidates = array();
 	$footer_candidates = array();
 	
-	foreach ($doc->pages as $page)
+	foreach ($doc->pages as $page_num => $page)
 	{
 		$bounding_rect = page_bounding_rect($page);
 		
@@ -542,18 +584,16 @@ function doc_decorations(&$doc, $debug = false)
 			{
 				if ($decoration_type == 'header')
 				{
-					$header_candidates[$page_counter] = $candidate;
+					$header_candidates[$page_num] = $candidate;
 				}
 				else
 				{
-					$footer_candidates[$page_counter] = $candidate;				
+					$footer_candidates[$page_num] = $candidate;				
 				}
 			
 			}			
 		
 		}
-		
-		$page_counter++;
 		
 	}
 	
@@ -568,10 +608,10 @@ function doc_decorations(&$doc, $debug = false)
 
 	$doc->decoration_blocks = array(); 
 	
-	for ($j = 0; $j < $page_counter; $j++)
+	for ($j = 0; $j < $page_num; $j++)
 	{
 		$win_start = max(0, $j - $page_window);
-		$win_end = min($j + $page_window, $page_counter - 1);
+		$win_end = min($j + $page_window, $page_num - 1);
 	
 		$doc->decoration_blocks[$j] = array();
 	
@@ -593,7 +633,7 @@ function doc_decorations(&$doc, $debug = false)
 				$max_score = 0;
 				for ($k = $win_start; $k < $win_end; $k++)
 				{			
-					if (($k != $j) && $candidates[$k])
+					if (($k != $j) && isset($candidates[$k]))
 					{
 						$max_score = 0;
 						// only compare if we have text in both
@@ -640,6 +680,8 @@ function doc_decorations(&$doc, $debug = false)
 function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 {
 	global $dict;
+	global $use_dictionary;
+	global $use_grid;
 	
 	$template = '';
 	
@@ -687,12 +729,10 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 	{
 		$doc_columns = 2;
 	}
-
-	$page_counter = 0;
 	
 	$region_rects = array();
 	
-	foreach ($doc->pages as $page)
+	foreach ($doc->pages as $page_num => $page)
 	{
 		$block_features = array();
 		
@@ -812,16 +852,19 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 		}	
 		
 		// repetitive header/footers
-		foreach ($doc->decoration_blocks[$page_counter] as $decoration_block_id)
+		if (isset($doc->decoration_blocks[$page_num]))
 		{
-			$block_features[$decoration_block_id]['repetitivePattern'] = 1;
+			foreach ($doc->decoration_blocks[$page_num] as $decoration_block_id)
+			{
+				$block_features[$decoration_block_id]['repetitivePattern'] = 1;
+			}
 		}
 			
 		if ($debug)
 		{
 			print_r($block_features);
 		}
-		
+				
 		//--------------------------------------------------------------------------------
 		// relationship between text and image blocks
 		// by default we just look for text that is below an image
@@ -1010,6 +1053,12 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				
 				$line_widths[$line_id] = round(100 * ($maxx - $minx) / $block_rects[$block_id]->w, 0);
 			}
+			
+			if ($block_rects[$block_id]->w == 0)
+			{
+				echo "Bad block, page $page_num, block $block_id\n";				
+				print_r($block_rects[$block_id]);
+			}
 		}	
 		
 		//--------------------------------------------------------------------------------
@@ -1055,8 +1104,9 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 		// a text element is centred 
 
 		$block_lines_centred = array();
+		$line_rects = array();
 		
-		//echo "\nPage $page_counter\n";
+		//echo "\nPage $page_num\n";
 		
 		foreach ($block_lines as $block_id => $lines)
 		{
@@ -1103,8 +1153,9 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				else
 				{
 					$block_lines_centred[$block_id] = false;
-				}	
+				}
 				
+				$line_rects[$line_id] = $line_rect;								
 			}
 			
 			if ($debug && $block_lines_centred[$block_id])
@@ -1134,7 +1185,7 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				// figure out how to apply labels
 				
 				$n = count($doc->feature_row_to_page);
-				$doc->feature_row_to_page[$n] = $page_counter;
+				$doc->feature_row_to_page[$n] = $page_num;
 				
 				$doc->feature_row_to_words[$n] = array();		
 			
@@ -1219,6 +1270,20 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				if (mb_strlen($string) == 1)
 				{
 					$line_features[$line_id]['singleChar'] = 1;
+				}
+				
+				//------------------------------------------------------------------------
+				// to do: grid coordinates of line
+				if ($use_grid)
+				{
+					// normalise to 0-100
+					$scale_x = 100/$page->width;
+					$scale_y = 100/$page->height;
+					
+					$line_features[$line_id]['x'] = round($line_rects[$line_id]->x * $scale_x, 0);
+					$line_features[$line_id]['y'] = round($line_rects[$line_id]->y * $scale_y, 0);
+					$line_features[$line_id]['w'] = round($line_rects[$line_id]->w * $scale_x, 0);
+					$line_features[$line_id]['h'] = round($line_rects[$line_id]->h * $scale_y, 0);				
 				}
 
 				//------------------------------------------------------------------------
@@ -1363,6 +1428,13 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				{
 					$line_features[$line_id]['date'] = 'DATE';
 				}	
+				
+				// Received: 19.11.2018
+				if (preg_match('/\d{1,2}\.\d{1,2}\.[1|2][0-9]{3}/iu', $line_text))
+				{
+					$line_features[$line_id]['date'] = 'DATE';
+				}
+				
 				*/			
 				
 				// acronyms (e.g., museum codes)
@@ -1379,14 +1451,11 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				}
 
 				// nomenclature annotations (where can we get a list)?
-				if (preg_match('/(new\s+(combination|family|genus|species))|((comb|fam|gen|sp)\.\s+n(ov)?\.)/i', $line_text))
+				$line_features[$line_id]['nomenclature'] = 'no';	
+				if (preg_match('/(new\s+(combination|family|genus|species))|((comb|fam|gen|sp|spec)\.\s+n(ov)?\.)/i', $line_text))
 				{
 					$line_features[$line_id]['nomenclature'] = 'NOMEN';
 				}
-				else
-				{
-					$line_features[$line_id]['nomenclature'] = 'no';				
-				}												
 
 				//------------------------------------------------------------------------
 				// gazetter (try all tokens in line)
@@ -1414,14 +1483,15 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 				if ($dictStatus & 2) { $dictStatus ^ 2; $femaleName = "femaleName"; } else { $femaleName = "no"; }
 				if ($dictStatus & 1) { $dictStatus ^ 1; $maleName = "maleName"; } else { $maleName = "no"; }
 				
-				
-				//$line_features[$line_id]['publisherName'] 	= $publisherName;	// seems garbarge
-				//$line_features[$line_id]['placeName'] 		= $placeName;	
-				//$line_features[$line_id]['monthName'] 		= $monthName;	
-				//$line_features[$line_id]['lastName'] 		= $lastName;	
-				//$line_features[$line_id]['femaleName'] 		= $femaleName;	
-				//$line_features[$line_id]['maleName'] 		= $maleName;	
-
+				if ($use_dictionary)
+				{
+					$line_features[$line_id]['publisherName'] 	= $publisherName;	// seems garbarge
+					$line_features[$line_id]['placeName'] 		= $placeName;	
+					$line_features[$line_id]['monthName'] 		= $monthName;	
+					$line_features[$line_id]['lastName'] 		= $lastName;	
+					$line_features[$line_id]['femaleName'] 		= $femaleName;	
+					$line_features[$line_id]['maleName'] 		= $maleName;	
+				}
 
 				//------------------------------------------------------------------------
 				// structural features of the line
@@ -1516,7 +1586,6 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 			$line_features[$line_id]['pageStatus'] = 'PAGEEND';
 		}
 
-		
 		foreach ($line_features as $line_id => $features)
 		{	
 			// Make sure we have a template file for CRF
@@ -1535,7 +1604,8 @@ function doc_do_pages(&$doc, $output_labels = false, $debug = false)
 			$crf_data .= join(' ', $features) . "\n";						
 		}	
 		
-		$page_counter++;
+		$crf_data .=  "\n";	
+		
 	}
 
 	return $crf_data;	

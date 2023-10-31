@@ -2,34 +2,116 @@
 
 Use a CRF to label document layout. Inspired by Grobid, input and output data formats based on VILA (a LLM approach).
 
+## MAJOR fuck up
+
+Will need to handle blank pages as they screw with the order of data in the data and output files, resulting in major mess :(
+
 ## Issues
 
-### Fonts
+### Tesseract can badly fail to recognise image boundaries
 
-Some files, e.g. 32_2_113_118_Golovatch_Korotaeva_for_Inet.pdf have custom fonts for male/female symbols. These font can be seen using Adobe Acrobat, and extracted using:
+e.g. BioStor 260594 has some figures badly mangled, recognised as a mixture of text and image fragments, text typically has low confidence, but still an ugly mess.
 
-```
-mutool extract 32_2_113_118_Golovatch_Korotaeva_for_Inet.pdf
-```
+#### Layout Parser may be the answer
 
-I need to understand how to add fonts to whatever PDF tool I use.
+Layout Parser  seems to be able to identify figure blocks accurately, so we could use it to detect figures, extract those blocks, add to hOCR-derived blocks, deleting anything in hOCR that overlaps those new figure blocks, then go from there.
 
+### Languages and Unicode
 
-### Superscript/subscript
+Rather than detect languages we could rely on Unicode code blocks as a way to signal that we have different languages. We can use `IntlChar::getBlockCode($char)` to detect the block, for example:
 
-Some files have super- or subscripts, and pdftoxml extracts these as separate blocks, which breaks the line of text and hence affects our ability to understand the text. Can we fix this?
+| language | character | block |
+|--|--|--|--|
+|en | A  | 1|
+|zu |河  | 71|
+|de  | ö  | 2|
+|ru  | Ж  | 9|
+|ja  | ク  | 63|
+|ko  | 가  | 74|
+|fr  | é  | 2|
+|no |  ø  | 2|
+|?  | ♂  | 55|
 
-### Other pdf xml tools
+### OCR training
+
+Installed tesseract using Homebrew, works well. Script `ocr.php` will OCR a PDF to generate tokens files, at which point the other tools can be used. It also extracts figures flagged in the hOCR output.
+
+One issue is the failure to recognise male/female symbols. There are articles about training a new font, but apparently we can also add symbols to an existing training data (but it depends on  a particular format being used). See the `tess` folder for a bunch of stuff on this topic.
+
+### Tools
+
+By default I use [pdf2xml](https://github.com/rdmpage/pdf2xml), but other tools are available.
+
+The popplr took, e.g.:
 
 ```
 pdftohtml -xml 32_2_113_118_Golovatch_Korotaeva_for_Inet.pdf x.xml
 ```
 
+[pdfalto](https://github.com/kermitt2/pdfalto) (see https://github.com/kermitt2/pdfalto/issues/159 for my experience building this on a Mac M1) is used by GROBID and handles superscripts properly (I think).
+
+
+### Fonts
+
+Some files, e.g. 32_2_113_118_Golovatch_Korotaeva_for_Inet.pdf have custom fonts for male/female symbols. These fonts can be seen using Adobe Acrobat, and extracted using:
+
+```
+mutool extract 32_2_113_118_Golovatch_Korotaeva_for_Inet.pdf
+```
+
+I need to understand how to add fonts to whatever PDF tool I use. It is possible to add fonts to XPDF (see notes for `pdftoxml`). Can we generative this?
+
+Using `php pdf_explore.php` would sometimes crash with an encoding exception, commenting out the line:
+
+```
+ //$details['Encoding'] = ($this->has('Encoding') ? (string) $this->get('Encoding') : 'Ansi');
+```
+
+in file `/Users/rpage/Development/doc-layout-crf/vendor/smalot/pdfparser/src/Smalot/PdfParser/Font.php(97)`
+
+Looks like issue might be that encoding can be an array, not just a string. An example PDF that crashes `pdf_explore.php` is `0022-1511_2006_40_486_NFSOTG_2.0.CO_2.pdf`
+
+### Superscript/subscript
+
+~~Some files have super- or subscripts, and `pdftoxml` extracts these as separate blocks, which breaks the line of text and hence affects our ability to understand the text. Can we fix this~~?
+
+`pdfalto` seems to handle these OK.
+
+### “Hidden” blocks
+
+Some PDFs, e.g. `1-s2.0-S1631069110002283-main.pdf` seem to have blocks that ar not visible, but which break my code because at least one of their dimensions is zero. What are these, and how do we handle them?
+
+### Vector images
+
+`.vec` files encode SVG, so we need code to render that. Need to figure out clip areas, and how we can merge vector diagrams and text labels that may be assigned to blocks. See `vec.php` for first attempt at code.
+
+The vector files are linked to the main XML file like this:
+
+```xml
+ <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="02c0376d7b6e8e00c9c5d622533ef99ddedd3601.xml_data/image-8.vec" />
+```
+
+The coordinates seem to be w.r.t. to whole page, and the image may include things like lines in tables, below headers, etc.
+
+#### pdfalto
+
+`pdfalto` extracts vector images as SVG.
+
+### PDFs with no text just outlines
+
+Flattened PDFs have text striped out and replaced by outlines (which `pdfalto` extracts as SVG paths). This means there is no editable nor retrievable text form the PDF, so OCR is the only option, even though PDF is born digital. Such PDFs have images embedded as Paula, so we can still extract those in high quality using `pdftoxml/pdfalto`, but the text will have to be OCRed.
+
+Alternatively, can we read each character path and convert it to a letter, e.g. by transforming to the same coordinate space, matching identical coordinates, then dumping a list and mapping manually.
+
+### Online tools
+
+https://www.eecis.udel.edu/~compbio/PDFigCapX (see https://doi.org/10.1093/bioinformatics/btz228 )
+
 ### PDF types and vendors
 
 #### ResearchGate
 
-ResearchGate PDFs seem to have a `rgid` field inserted into the `details` object for a PDF. 
+ResearchGate PDFs seem to have a `rgid` field inserted into the `details` object for a PDF. WE can use this as a flag for the presence of a cover page.
 
 ## Training data
 
@@ -60,6 +142,10 @@ Entomotaxonomia | 2016001 |10.11680/entomotax.2016001 |http://xbkcflxb.cnjournal
 Entomotaxonomia | 2016005 | 10.11680/entomotax.2016005 | | | 
 Austrobaileya | ngugi-pomax-ammophila-austrobaileya-v12-107-116 | | https://www.qld.gov.au/environment/plants-animals/plants/herbarium/austrobaileya | “free” | https://www.qld.gov.au/__data/assets/pdf_file/0022/332419/ngugi-pomax-ammophila-austrobaileya-v12-107-116.pdf
 Folia Parasitologica | fp.2015.025 | 10.14411/fp.2015.025 | https://folia.paru.cas.cz/artkey/fol-201501-0025_an_additional_genus_and_two_additional_species_of_forticulcitinae_digenea_haploporidae.php | CC-BY | https://folia.paru.cas.cz/pdfs/fol/2015/01/25.pdf
+Journal of Species Research | JAKO201515337344310 | 10.12651/JSR.2015.4.1.001 | http://koreascience.or.kr/article/JAKO201515337344310.page | | http://koreascience.or.kr/article/JAKO201515337344310.pdf
+Kew Bulletin | s12225-015-9569-6 | 10.1007/S12225-015-9569-6 | https://link.springer.com/article/10.1007/s12225-015-9569-6 | Provided by the Springer Nature SharedIt content-sharing initiative | https://link.springer.com/content/pdf/10.1007/s12225-015-9569-6.pdf?pdf=button%20sticky
+Comptes Rendus Biologies | 1-s2.0-S1631069110002283-main | 10.1016/j.crvi.2010.09.005 | https://www.sciencedirect.com/science/article/pii/S1631069110002283 | http://www.elsevier.com/open-access/userlicense/1.0/ | https://www.sciencedirect.com/science/article/pii/S1631069110002283/pdfft?md5=2faf9c3274158814cb171660f3f0db87&pid=1-s2.0-S1631069110002283-main.pdf
+
 
 ## PDFs
 
